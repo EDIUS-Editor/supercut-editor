@@ -100,7 +100,7 @@ A professional web-based video editing tool for creating precise video clips, ma
       "id": "1",
       "start": 90,
       "end": 155,
-      "subtitles": [{ "text": "subtitle text", "start": 90, "end": 155 }]
+      "comments": [{ "text": "Hello World", "start": 90, "end": 155 }]
     }
   ],
   "waveform": {
