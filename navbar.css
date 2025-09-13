@@ -2,7 +2,7 @@
 
 #navbar {
   background-color: #FFFFFF;
-  border-bottom: 1px solid #00FF00;
+  border-bottom: 5px solid #00FF00;
   font-family: Poppins, 'Segoe UI', sans-serif;
   max-width: 1200px;
   margin: 0 auto;
@@ -34,7 +34,7 @@
   background-color: #00FF00;
 }
 #navbar a.active-link{
-  border-bottom: 2px solid #000000;
+  border-bottom: 3px solid #000000;
 }
 #navbar a.accent-link{
   background-color: #FFDD00;
