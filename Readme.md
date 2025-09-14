@@ -1,6 +1,10 @@
 # Supercut and Marker Video Editor
 
-A professional web-based video editing tool for creating precise video clips, managing markers, and working with subtitles. Perfect for creating supercuts, highlight reels, and precise video segments with frame-accurate timing.
+A professional web-based video editing tool for creating precise video clips, creating or managing video markers, and working with subtitles. Perfect for creating supercuts, highlight reels, montages and for removing or joining to together words or phrasings with frame-accurate timing.
+Uploading SRT subtitles or word-level timestamps VTT subtitles will be display on both the video player and the transcript tab for searching a word, phrase, "uhs" or "ums", non-speech sounds e.g. "[applause]" and "[laughter]", or a speaker. 
+Click on any word or phrase to seek to that exact moment on the video and it automatically sets IN and OUT to be added to a edit/marker list.
+Non-destructive editing, original video files remain untouched. All video files are privately playback directly on the user's computer, no video or data is uploaded to unknown servers. 
+Save and restore complete editing sessions to a JSON file on your computer which can be later converted to FCP7XML project file or video markers list. No data is saved on our servers.
 
 ## 🎯 **Core Features**
 
@@ -9,7 +13,6 @@ A professional web-based video editing tool for creating precise video clips, ma
 - **Frame-accurate stepping** (forward/backward by individual frames)
 - **SMPTE timecode display** (HH:MM:SS:FF format)
 - **Automatic framerate detection** during playback
-- **Manual framerate selection** (23.976, 24, 25, 29.97, 30, 50, 59.94, 60 fps)
 - **Loop playback** for selected ranges
 - **Responsive design** optimized for desktop and mobile devices
 
@@ -100,7 +103,7 @@ A professional web-based video editing tool for creating precise video clips, ma
       "id": "1",
       "start": 90,
       "end": 155,
-      "comments": [{ "text": "Hello World", "start": 90, "end": 155 }]
+      "subtitles": [{ "text": "subtitle text", "start": 90, "end": 155 }]
     }
   ],
   "waveform": {

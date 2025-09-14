@@ -8,7 +8,7 @@
   margin: 0 auto;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
-  border-top-right-radius: 20px;
+    border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
 }
 #navbar ul{
@@ -18,7 +18,7 @@
   padding-left: 0;
 }
 #navbar .home-li{
-  margin-left: 10px;
+  margin-left: 10px;	
   margin-right: auto;
 }
 #navbar li{
