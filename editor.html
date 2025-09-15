@@ -121,9 +121,9 @@
                     </div>
                     
                     <div class="time-info ms-auto">
-                        <span id="current-time">00:00:00:00</span>
+                        <span>Current: <span id="current-time-value">00:00:00:00</span></span>
                         <span>/</span>
-                        <span id="duration-time">00:00:00:00</span>
+                        <span>Total: <span id="duration-time-value">00:00:00:00</span></span>
                     </div>
                 </div>
 
@@ -139,7 +139,7 @@
 
                 <!-- Selection time display -->
                 <div class="time-info my-2 d-flex flex-wrap justify-content-center justify-content-md-start">
-                    <span id="selection-time" class="me-3">Selection: 00:00:00:00 - 00:00:00:00</span>
+                    <span id="selection-time" class="me-3">IN: 00:00:00:00 - OUT: 00:00:00:00</span>
                     <span id="selection-duration">Duration: 00:00:00:00</span>
                 </div>
 
@@ -149,6 +149,8 @@
                 <div id="waveform-scroll-container" style="display: none;">
                     <div id="waveform"></div>
                 </div>
+
+                
 
                 <!-- Markers control buttons -->
 				<div class="d-flex flex-wrap justify-content-center justify-content-md-start align-items-center my-3 gap-2">
