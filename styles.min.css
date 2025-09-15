@@ -866,3 +866,39 @@ h5 {
         padding: 0px 1px;
     }
 }
+
+/* Custom Duration Input Styling */
+/* Mobile-first stacked layout */
+.custom-duration-group .duration-row {
+  display: flex;
+}
+.custom-duration-group .duration-row input.form-control {
+  flex-grow: 1;
+  min-width: 50px; /* prevent input from getting too small */
+}
+.custom-duration-group .duration-separator {
+  display: flex;
+  justify-content: center;
+}
+.custom-duration-group > div {
+    margin-bottom: 5px; /* Add space between stacked rows */
+}
+
+/* Desktop horizontal layout */
+@media (min-width: 480px) {
+  .custom-duration-group {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    width: 100%;
+  }
+  .custom-duration-group > div {
+    margin-bottom: 0; /* Remove bottom margin for horizontal layout */
+  }
+  .custom-duration-group .duration-row {
+    flex-grow: 1;
+  }
+  .custom-duration-group .duration-separator {
+    flex-grow: 0;
+  }
+}
