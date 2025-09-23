@@ -2,7 +2,7 @@
 export async function onRequest(context) {
   // CONFIG
   const TTL_MS = 24 * 60 * 60 * 1000; // 24 hours — change if you want shorter/longer
-  const ALLOWED_ORIGIN = "https://www.supercut-editor.com"; // your site
+  const ALLOWED_ORIGIN = "https://supercut-editor.com"; // your site
 
   // Handle CORS preflight
   if (context.request.method === "OPTIONS") {
@@ -33,3 +33,4 @@ export async function onRequest(context) {
     }
   });
 }
+
