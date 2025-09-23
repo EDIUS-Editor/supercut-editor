@@ -40,6 +40,18 @@ body {
     margin: 0;
 }
 
+/* Custom style for file input buttons for better contrast */
+.form-control::file-selector-button {
+    background-color: #d0d0d0;
+    border-color: #c0c0c0;
+    color: #333;
+    transition: background-color 0.2s ease-in-out;
+}
+
+  .form-control::file-selector-button:hover {
+      background-color: #c0c0c0; / Slightly darker grey on hover /
+  }
+
 .video-container {
     width: 100%;
     padding: 0;
@@ -778,6 +790,38 @@ h5 {
     .tick-label {
         font-size: 8px;
         padding: 0px 2px;
+    }
+}
+
+/* Jump to IN/OUT buttons styling */
+#jump-to-in, #jump-to-out {
+    font-weight: bold;
+    min-width: 45px;
+	max-width: 45px;
+    font-family: 'Courier New', monospace;
+}
+
+/* Keep buttons together */
+.btn-group #jump-to-in {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+}
+
+.btn-group #jump-to-out {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* Ensure buttons stay together on mobile */
+@media (max-width: 768px) {
+    .btn-group {
+        flex-wrap: nowrap !important;
+        white-space: nowrap;
+    }
+    
+    #jump-to-in, #jump-to-out {
+        flex: 0 0 auto;
     }
 }
 

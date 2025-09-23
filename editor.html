@@ -133,32 +133,33 @@
                     <div class="main-timeline-selection" id="main-timeline-selection"></div>
                     <div class="main-timeline-playhead" id="main-timeline-playhead"></div>
                 </div>
-
+				
                 <!-- Timeline Scale -->
                 <div id="timeline-scale"></div>
-
-                <!-- Selection time display -->
-                <div class="time-info my-2 d-flex flex-wrap justify-content-center justify-content-md-start">
-                    <span id="selection-time" class="me-3">IN: 00:00:00:00 - OUT: 00:00:00:00</span>
-                    <span id="selection-duration">Duration: 00:00:00:00</span>
-                </div>
-
+				
                 <!-- Waveform Section -->
                 <div id="waveform-message"></div>
                 <div id="loading-indicator">Processing audio waveform, please wait...</div>
                 <div id="waveform-scroll-container" style="display: none;">
                     <div id="waveform"></div>
                 </div>
-
-                
-
+				
+                <!-- Selection time display -->
+                <div class="time-info my-2 d-flex flex-wrap justify-content-center justify-content-md-start">
+                    <span id="selection-time" class="me-3">IN: 00:00:00:00 - OUT: 00:00:00:00</span>
+                    <span id="selection-duration">Duration: 00:00:00:00</span>
+                </div>					
+        
                 <!-- Markers control buttons -->
 				<div class="d-flex flex-wrap justify-content-center justify-content-md-start align-items-center my-3 gap-2">
-                    <button id="set-in-point" class="btn btn-success" title="Set IN point at current position (I)">IN</button>
-                    <button id="set-out-point" class="btn btn-danger" title="Set OUT point at current position (O)">OUT</button>
-                    <button id="add-marker" class="btn btn-primary" title="Add Marker Range ([)">Add Marker Range</button>
-					<button id="reset-zoom" class="btn btn-warning">Reset</button>
-                </div>
+					<button id="set-in-point" class="btn btn-success" title="Set IN point at current position (I)">IN</button>
+					<button id="set-out-point" class="btn btn-danger" title="Set OUT point at current position (O)">OUT</button>
+					<button id="add-marker" class="btn btn-primary" title="Add Marker Range ([)">Add Marker Range</button>
+					<button id="reset-zoom" class="btn btn-warning" title="Reset IN/OUT to full duration (X)">Reset</button>
+					<!-- Jump to IN/OUT buttons grouped together -->
+					<button id="jump-to-in" class="btn btn-outline-primary" title="Jump to IN point (Q)">[←</button>
+					<button id="jump-to-out" class="btn btn-outline-primary" title="Jump to OUT point (W)">→]</button>
+				</div>				
 				
 				<!-- Custom duration input -->
                 <h5 class="text-center my-3">Precise Range Duration</h5>
