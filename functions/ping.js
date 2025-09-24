@@ -1,8 +1,10 @@
-// /functions/ping.js (Pages Function)
+// functions/ping.js
 export async function onRequest(context) {
+  console.log('🔍 Ping function called!', context.request.method, context.request.url);
   const TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
-  const ALLOWED_ORIGIN = 'https://www.supercut-editor.com'; 
+  const ALLOWED_ORIGIN = 'https://www.supercut-editor.com';
 
+  // Handle CORS preflight
   if (context.request.method === 'OPTIONS') {
     return new Response(null, {
       status: 204,
@@ -15,13 +17,13 @@ export async function onRequest(context) {
     });
   }
 
+  // Main response
   const validUntil = new Date(Date.now() + TTL_MS).toISOString();
   const body = JSON.stringify({
     ok: true,
     serverTime: new Date().toISOString(),
     validUntil,
-    // Optional: Add more validation data
-    domain: new URL(context.request.url).hostname
+    message: 'Ping successful'
   });
 
   return new Response(body, {
@@ -29,10 +31,7 @@ export async function onRequest(context) {
     headers: {
       'Content-Type': 'application/json',
       'Cache-Control': 'no-store',
-      'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
-      // Optional: Add security headers
-      'X-Content-Type-Options': 'nosniff',
-      'X-Frame-Options': 'DENY'
+      'Access-Control-Allow-Origin': ALLOWED_ORIGIN
     }
   });
 }
