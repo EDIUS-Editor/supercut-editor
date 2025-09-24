@@ -1,6 +1,8 @@
 // functions/ping.js
 export async function onRequest(context) {
   console.log('🔍 Ping function called!', context.request.method, context.request.url);
+// functions/ping.js
+export async function onRequest(context) {
   const TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
   const ALLOWED_ORIGIN = 'https://www.supercut-editor.com';
 
@@ -19,12 +21,14 @@ export async function onRequest(context) {
 
   // Main response
   const validUntil = new Date(Date.now() + TTL_MS).toISOString();
-  const body = JSON.stringify({
+  const responseData = {
     ok: true,
     serverTime: new Date().toISOString(),
     validUntil,
     message: 'Ping successful'
-  });
+  };
+
+  const body = JSON.stringify(responseData);
 
   return new Response(body, {
     status: 200,
