@@ -1,0 +1,1107 @@
+/* CSS Variables for consistent colors and values */
+:root {
+    --primary-color: #2196F3;
+    --primary-dark: #1976D2;
+    --secondary-color: #4CAF50;
+    --secondary-dark: #43A047;
+    --light-bg: #f8f9fa;
+    --lighter-bg: #e9ecef;
+    --timeline-bg: #d0d0d0;
+    --border-radius: 4px;
+    --transition-speed: 0.2s;
+}
+
+/* Base container and components */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background: linear-gradient(135deg, #0d8b8e 0%, #0f585e 100%);
+    min-height: 100vh;
+    padding: 20px;
+    overflow-x: hidden;
+    margin: 0;
+}
+
+.main-wrapper {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    max-width: 1200px;
+    width: 100%;
+    margin: 20px auto;
+}
+
+.container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+/* Custom style for file input buttons for better contrast */
+.form-control::file-selector-button {
+    background-color: #d0d0d0;
+    border-color: #c0c0c0;
+    color: #333;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.form-control::file-selector-button:hover {
+    background-color: #c0c0c0;
+}
+
+.video-container {
+    width: 100%;
+    padding: 0;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.video-controls, .marker-item { 
+    background: var(--light-bg); 
+    border-radius: var(--border-radius); 
+    padding: 10px; 
+    margin: 10px 0; 
+    width: 100%;
+}
+
+/* Video styling */
+.video-wrapper { 
+    position: relative; 
+    margin-bottom: 15px; 
+    width: 100%;
+}
+
+#my_video {
+    width: 100%;
+    background: #000;
+    border-radius: var(--border-radius);
+    display: block;
+}
+
+/* Main Timeline elements */
+.main-timeline-container {
+    position: relative;
+    margin: 10px 0;
+    height: 55px;
+    width: 100%;
+    background: var(--timeline-bg);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    user-select: none;
+}
+
+.main-timeline-track {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: var(--timeline-bg);
+    border-radius: var(--border-radius);
+}
+
+.main-timeline-selection {
+    position: absolute;
+    top: 20px;
+    height: 20px;
+    background: rgba(33, 150, 243, 0.3);
+    border-radius: var(--border-radius);
+    pointer-events: none;
+}
+
+.main-timeline-playhead {
+    position: absolute;
+    top: 15px;
+    width: 3px;
+    height: 30px;
+    background: var(--primary-color);
+    transform: translateX(-50%);
+    cursor: ew-resize;
+    z-index: 3;
+    pointer-events: none;
+    border-radius: 2px;
+}
+
+.main-timeline-playhead::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; 
+    height: 0; 
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid var(--primary-color);
+}
+
+.main-timeline-playhead::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; 
+    height: 0; 
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid var(--primary-color);
+}
+
+/* Time info displays */
+.time-info {
+    display: flex;
+    gap: 15px;
+    font-family: monospace;
+    font-size: 14px;
+    margin: 5px 0;
+    flex-wrap: wrap;
+}
+
+/* Drop zone styling */
+.drop-zone {
+    border: 2px dashed #ccc;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    text-align: center;
+    transition: border var(--transition-speed) ease-in-out;
+    margin-bottom: 20px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.drop-zone.drag-over {
+    border-color: var(--primary-color);
+    background-color: rgba(33, 150, 243, 0.1);
+}
+
+.drop-zone p {
+    margin: 0;
+    color: #666;
+}
+
+/* Button styling */
+.btn {
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    width: 100%;
+}
+
+.btn-group .btn {
+    flex: 1 1 auto;
+    min-width: fit-content;
+}
+
+.frame-step {
+    padding: 4px 6px;
+    font-size: 12px;
+    min-width: 40px;
+}
+
+/* Repeat button styling */
+#repeat-play.active {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Search input wrapper for marker search */
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-clear-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: #666;
+    cursor: pointer;
+    padding: 2px;
+    display: none;
+    z-index: 10;
+}
+
+.search-clear-btn:hover {
+    color: #333;
+}
+
+/* Marker styles */
+.marker-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color var(--transition-speed);
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.marker-item.active {
+    background: #e3f2fd;
+    border-left: 3px solid var(--primary-color);
+}
+
+.marker-label { 
+    cursor: pointer; 
+    flex: 1;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.marker-actions { 
+    display: flex; 
+    gap: 5px; 
+    flex-wrap: nowrap;
+}
+
+.marker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.marker-comment {
+    padding: 8px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    margin-top: 5px;
+    max-height: 60px;
+    overflow-y: auto;
+    font-size: 0.9rem;
+    width: 100%;
+    border-left: 3px solid #e9ecef;
+}
+
+.edit-marker {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: white;
+}
+
+.edit-marker:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+}
+
+.marker-edit-form {
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    margin-top: 5px;
+    border-left: 3px solid var(--primary-color);
+}
+
+/* Form elements */
+.form-control, .form-select {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(33, 150, 243, 0.25);
+}
+
+.input-group {
+    width: 100%;
+}
+
+.input-group > .form-control,
+.input-group > .btn {
+    min-height: 38px;
+}
+
+.info-text {
+    color: #666;
+    font-style: italic;
+}
+
+/* Header styling */
+h2 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+h5 {
+    color: #555;
+    font-weight: 500;
+}
+
+/* Waveform Styling */
+#waveform-container {
+    position: relative;
+    width: 100%;
+    height: 128px;
+    background: #f5f5f5;
+    border-radius: 5px;
+}
+
+#waveform-scroll-container {
+    position: relative;
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) var(--lighter-bg);
+}
+
+#waveform-scroll-container:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(33, 150, 243, 0.4);
+    transform: translateY(-1px);
+}
+
+#waveform-scroll-container::before {
+    content: "Click anywhere to seek";
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 11px;
+    color: #666;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 6px;
+    border-radius: 3px;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+}
+
+#waveform-scroll-container:hover::before {
+    opacity: 1;
+}
+
+#waveform-scroll-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+#waveform-scroll-container::-webkit-scrollbar-track {
+    background: var(--lighter-bg);
+    border-radius: 4px;
+}
+
+#waveform-scroll-container::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 4px;
+}
+
+#waveform {
+    width: 100%;
+    min-height: 128px;
+    position: relative;
+}
+
+/* Enhanced waveform interaction styling */
+#waveform canvas {
+    cursor: pointer !important;
+    transition: opacity 0.1s ease;
+}
+
+#waveform canvas:hover {
+    opacity: 0.9;
+}
+
+#waveform canvas:active {
+    opacity: 0.8;
+}
+
+/* Loading and message styling */
+#waveform-message {
+    display: none;
+    margin: 10px 0;
+    padding: 12px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 500;
+    border-left: 4px solid #28a745;
+}
+
+#loading-indicator {
+    display: none;
+    color: #4285f4;
+    margin: 10px 0;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Animation for click feedback */
+@keyframes clickPulse {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(3);
+        opacity: 0;
+    }
+}
+
+.waveform-click-indicator {
+    animation: clickPulse 0.3s ease-out;
+}
+
+/* Timeline Scale Styling */
+#timeline-scale {
+    position: relative;
+    width: 100%;
+    height: 25px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    background: linear-gradient(to bottom, transparent 0%, transparent 70%, #f0f0f0 70%, #f0f0f0 100%);
+    border-radius: 0 0 4px 4px;
+}
+
+.tick {
+    position: absolute;
+    bottom: 15px;
+    width: 1px;
+    height: 8px;
+    background-color: #666;
+    z-index: 1;
+}
+
+.tick-label {
+    position: absolute;
+    bottom: 0px;
+    font-size: 10px;
+    font-family: 'Courier New', monospace;
+    color: #333;
+    font-weight: 500;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 1px 3px;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+    z-index: 2;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+        align-items: flex-start;
+    }
+    
+    .main-wrapper {
+        padding: 20px;
+        border-radius: 15px;
+        max-height: none;
+        min-height: 100vh;
+    }
+    
+    .btn-group {
+        justify-content: center;
+    }
+    
+    .main-timeline-container {
+        height: 50px;
+    }
+    
+    .main-timeline-track {
+        top: 15px;
+        height: 20px;
+    }
+    
+    .main-timeline-selection {
+        top: 15px;
+    }
+    
+    .main-timeline-playhead {
+        top: 10px;
+        height: 30px;
+    }
+    
+    .btn {
+        padding-left: 8px;
+        padding-right: 8px;
+        font-size: 14px;
+    }
+    
+    .d-flex {
+        width: 100%;
+    }
+    
+    .marker-actions {
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    
+    .marker-actions .btn {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+    
+    #timeline-scale {
+        height: 20px;
+    }
+    
+    .tick {
+        height: 6px;
+        bottom: 12px;
+    }
+    
+    .tick-label {
+        font-size: 8px;
+        padding: 0px 2px;
+    }
+    
+    /* Silence detection responsive */
+    .silence-detection-panel .btn-group-sm .btn {
+        padding: 2px 4px;
+        font-size: 10px;
+    }
+    
+    .region-label {
+        font-size: 12px;
+    }
+}
+
+/* Jump to IN/OUT buttons styling */
+#jump-to-in, #jump-to-out {
+    font-weight: bold;
+    min-width: 45px;
+	max-width: 45px;
+    font-family: 'Courier New', monospace;
+}
+
+/* Keep buttons together */
+.btn-group #jump-to-in {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+}
+
+.btn-group #jump-to-out {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* Ensure buttons stay together on mobile */
+@media (max-width: 768px) {
+    .btn-group {
+        flex-wrap: nowrap !important;
+        white-space: nowrap;
+    }
+    
+    #jump-to-in, #jump-to-out {
+        flex: 0 0 auto;
+    }
+}
+
+/* Add these styles to your existing silent.styles.css file */
+
+/* Silence Detection Panel Styling */
+.silence-detection-panel {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.silence-detection-panel:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.silence-detection-panel .card-header {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    border-radius: 8px 8px 0 0;
+    padding: 12px 20px;
+}
+
+.silence-detection-panel .card-header h5 {
+    margin: 0;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.silence-detection-panel .card-body {
+    padding: 20px;
+}
+
+/* Parameter Controls */
+.silence-detection-panel .input-group {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.silence-detection-panel .input-group .btn-outline-secondary {
+    border: none;
+    background: #e9ecef;
+    color: #495057;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    min-width: 36px;
+}
+
+.silence-detection-panel .input-group .btn-outline-secondary:hover {
+    background: #dc3545;
+    color: white;
+    transform: scale(1.05);
+}
+
+.silence-detection-panel .input-group .btn-outline-secondary#threshold-plus:hover,
+.silence-detection-panel .input-group .btn-outline-secondary#duration-plus:hover,
+.silence-detection-panel .input-group .btn-outline-secondary#padding-plus:hover {
+    background: #28a745;
+}
+
+.silence-detection-panel input[type="number"] {
+    border: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    background: #f8f9fa;
+}
+
+/* Detection Action Buttons */
+#detect-silence {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+#detect-silence:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
+}
+
+#detect-silence:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+}
+
+#clear-all-silence {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+#clear-all-silence:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(245, 87, 108, 0.4);
+}
+
+#load-all-silence {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+#load-all-silence:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(79, 172, 254, 0.4);
+}
+
+/* Global Fine-Tune Section */
+#global-fine-tune {
+    margin-top: 15px;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#global-fine-tune .card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 10px 15px;
+}
+
+#global-fine-tune .card-body {
+    background: #f8f9fa;
+}
+
+#global-fine-tune .btn-group {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+#global-fine-tune .btn-group .btn {
+    border: none;
+    font-weight: 600;
+    padding: 8px 16px;
+}
+
+/* Detection Status */
+#detection-status {
+    border-left: 4px solid #0dcaf0;
+    animation: fadeIn 0.3s ease;
+}
+
+#detection-status.alert-success {
+    border-left-color: #28a745;
+    background: #d4edda;
+    color: #155724;
+}
+
+#detection-status.alert-danger {
+    border-left-color: #dc3545;
+    background: #f8d7da;
+    color: #721c24;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Silent Region Markers Styling */
+.marker-item.silent-region {
+    background: linear-gradient(135deg, rgba(255, 193, 193, 0.3) 0%, rgba(255, 230, 230, 0.3) 100%);
+    border-left: 4px solid #dc3545;
+    position: relative;
+    overflow: hidden;
+}
+
+.marker-item.silent-region::before {
+    content: '🔇';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    opacity: 0.3;
+}
+
+.marker-item.silent-region .marker-label {
+    font-weight: 600;
+    color: #842029;
+}
+
+.marker-item.silent-region.active {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.4) 0%, rgba(255, 193, 193, 0.4) 100%);
+    border-left-width: 6px;
+}
+
+.marker-item.silent-region .marker-comment {
+    background: rgba(255, 243, 243, 0.8);
+    border-left-color: #dc3545;
+    font-style: italic;
+    color: #842029;
+}
+
+/* Individual Silent Region Controls */
+.silent-region-controls {
+    display: flex;
+    gap: 5px;
+    margin-top: 8px;
+}
+
+.silent-region-controls .btn {
+    font-size: 0.85rem;
+    padding: 4px 8px;
+}
+
+.btn-adjust-start,
+.btn-adjust-end {
+    background: #6c757d;
+    color: white;
+    border: none;
+}
+
+.btn-adjust-start:hover {
+    background: #5a6268;
+}
+
+.btn-adjust-end:hover {
+    background: #545b62;
+}
+
+/* Waveform Silent Region Visualization */
+.wavesurfer-region.silent-region {
+    background: rgba(220, 53, 69, 0.3) !important;
+    border-left: 2px solid #dc3545;
+    border-right: 2px solid #dc3545;
+}
+
+.wavesurfer-region.silent-region:hover {
+    background: rgba(220, 53, 69, 0.4) !important;
+}
+
+/* Loading States */
+.detecting-silence {
+    position: relative;
+    overflow: hidden;
+}
+
+.detecting-silence::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    100% {
+        left: 100%;
+    }
+}
+
+/* Responsive Adjustments for Silence Detection */
+@media (max-width: 768px) {
+    .silence-detection-panel .row {
+        gap: 15px;
+    }
+    
+    .silence-detection-panel .col-md-4 {
+        width: 100%;
+    }
+    
+    #global-fine-tune .btn-group {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    #global-fine-tune .btn {
+        flex: 1;
+        font-size: 0.85rem;
+        padding: 6px 10px;
+    }
+    
+    .silence-detection-panel .input-group .btn-outline-secondary {
+        min-width: 30px;
+        padding: 4px 8px;
+    }
+    
+    .silent-region-controls {
+        flex-wrap: wrap;
+    }
+    
+    .silent-region-controls .btn {
+        flex: 1 1 calc(50% - 2.5px);
+        min-width: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .silence-detection-panel .card-header h5 {
+        font-size: 1rem;
+    }
+    
+    .silence-detection-panel input[type="number"] {
+        font-size: 1rem;
+    }
+    
+    #detect-silence,
+    #clear-all-silence,
+    #load-all-silence {
+        width: 100%;
+        margin-bottom: 5px;
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+    
+    #global-fine-tune .btn {
+        font-size: 0.75rem;
+        padding: 5px 8px;
+    }
+}
+
+/* Tooltip styles for better UX */
+.silence-detection-panel [title] {
+    position: relative;
+    cursor: help;
+}
+
+.silence-detection-panel small.text-muted {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+/* Animation for region detection */
+@keyframes pulseRed {
+    0% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+    }
+}
+
+.new-silence-region {
+    animation: pulseRed 1s;
+}
+
+/* Number input styling to prevent spin buttons */
+.silence-detection-panel input[type="number"]::-webkit-inner-spin-button,
+.silence-detection-panel input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.silence-detection-panel input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+    /* Small mobile devices */
+@media (max-width: 480px) {
+    body {
+        padding: 5px;
+    }
+    
+    .main-wrapper {
+        padding: 15px;
+        border-radius: 10px;
+    }
+    
+    .d-flex {
+        flex-direction: column;
+    }
+    
+    .d-flex.flex-wrap {
+        flex-direction: row;
+    }
+    
+    .d-flex > * {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    
+    .marker-actions,
+    .time-info {
+        flex-direction: row;
+        width: 100%;
+    }
+    
+    .btn, 
+    .form-control {
+        min-height: 44px;
+    }
+    
+    .frame-step {
+        width: auto;
+        min-width: 36px;
+    }
+
+    .marker-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .marker-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .marker-actions {
+        margin-top: 8px;
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .btn-group {
+        gap: 5px;
+    }
+    
+    .btn-group .btn {
+        flex: 1 1 calc(50% - 5px);
+    }
+    
+    .marker-edit-form textarea {
+        font-size: 0.85rem;
+    }
+    
+    .tick-label {
+        font-size: 7px;
+        padding: 0px 1px;
+    }
+    
+    /* Silence detection mobile adjustments */
+    .silence-detection-panel .card-body {
+        padding: 10px;
+    }
+    
+    .silence-detection-panel .form-label {
+        font-size: 12px;
+    }
+    
+    .silence-region-item {
+        padding: 8px;
+    }
+    
+    .silence-region-item .btn-group {
+        flex-wrap: wrap;
+        gap: 2px;
+    }
+    
+    .silence-region-item .btn-group-sm .btn {
+        flex: 1 1 calc(33% - 2px);
+        min-width: 40px;
+        padding: 4px 2px;
+        font-size: 10px;
+    }
+    
+    .region-label {
+        font-size: 11px;
+        display: block;
+        margin-bottom: 8px;
+    }
+    
+    #silence-regions-container .card-body {
+        max-height: 300px;
+    }
+}
