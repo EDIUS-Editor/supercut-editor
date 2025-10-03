@@ -1,12 +1,7 @@
-// functions/ping.js
 export async function onRequest(context) {
-  console.log('🔍 Ping function called!', context.request.method, context.request.url);
-// functions/ping.js
-export async function onRequest(context) {
-  const TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
-  const ALLOWED_ORIGIN = 'https://www.supercut-editor.com';
+  const TTL_MS = 24 * 60 * 60 * 1000;
+  const ALLOWED_ORIGIN = 'https://supercut-editor.com';
 
-  // Handle CORS preflight
   if (context.request.method === 'OPTIONS') {
     return new Response(null, {
       status: 204,
@@ -19,16 +14,13 @@ export async function onRequest(context) {
     });
   }
 
-  // Main response
   const validUntil = new Date(Date.now() + TTL_MS).toISOString();
-  const responseData = {
+  const body = JSON.stringify({
     ok: true,
     serverTime: new Date().toISOString(),
     validUntil,
     message: 'Ping successful'
-  };
-
-  const body = JSON.stringify(responseData);
+  });
 
   return new Response(body, {
     status: 200,
