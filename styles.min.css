@@ -825,6 +825,221 @@ h5 {
     }
 }
 
+/* WaveSurfer Marker Regions Styling */
+.wavesurfer-region {
+    cursor: move !important;
+}
+
+/* Style for marker regions (red) */
+.wavesurfer-region[data-id*="wavesurfer"] {
+    border: 1px solid rgba(255, 0, 0, 0.3) !important;
+}
+
+/* Hover effect for marker regions */
+.wavesurfer-region:hover {
+    opacity: 0.8 !important;
+}
+
+/* Region handles for resizing */
+.wavesurfer-handle {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    border: 2px solid rgba(255, 0, 0, 0.6) !important;
+    width: 8px !important;
+    cursor: ew-resize !important;
+}
+
+.wavesurfer-handle:hover {
+    background-color: rgba(255, 0, 0, 0.8) !important;
+    border-color: rgba(255, 0, 0, 1) !important;
+}
+
+/* Differentiate between marker regions and selection region */
+.wavesurfer-region.wavesurfer-marker-region {
+    background: rgba(255, 0, 0, 0.2) !important;
+    border-left: 2px solid rgba(255, 0, 0, 0.6);
+    border-right: 2px solid rgba(255, 0, 0, 0.6);
+}
+
+/* Active/highlighted marker region */
+.wavesurfer-region.wavesurfer-marker-active {
+    background: rgba(255, 0, 0, 0.4) !important;
+    border-left: 2px solid rgba(255, 0, 0, 0.8);
+    border-right: 2px solid rgba(255, 0, 0, 0.8);
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}
+
+/* Ensure selection region stays blue */
+.wavesurfer-region.wavesurfer-selection-region {
+    background: rgba(33, 150, 243, 0.2) !important;
+    border-left: 2px solid rgba(33, 150, 243, 0.6);
+    border-right: 2px solid rgba(33, 150, 243, 0.6);
+}
+
+/* Context Menu Styling */
+.waveform-context-menu {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    min-width: 150px;
+    padding: 5px 0;
+    font-size: 14px;
+}
+
+.context-menu-item {
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.context-menu-item:hover {
+    background-color: #f0f0f0;
+}
+
+.waveform-context-menu hr {
+    margin: 5px 0;
+    border: none;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* Tooltip for marker regions */
+.wavesurfer-region::after {
+    content: attr(data-label);
+    position: absolute;
+    top: -20px;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.wavesurfer-region:hover::after {
+    opacity: 1;
+}
+
+/* Visual feedback when dragging/resizing */
+.wavesurfer-region.wavesurfer-drag {
+    opacity: 0.6 !important;
+    cursor: grabbing !important;
+}
+
+/* Instructions overlay for waveform */
+#waveform-scroll-container::after {
+    content: "Double-click marker to delete • Right-click for options";
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+    font-size: 11px;
+    color: #666;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 6px;
+    border-radius: 3px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+}
+
+#waveform-scroll-container:hover::after {
+    opacity: 1;
+}
+
+/* Ensure proper stacking order in waveform */
+.wavesurfer-region.wavesurfer-selection-region {
+    z-index: 3 !important; /* Selection region on top */
+}
+
+.wavesurfer-region.wavesurfer-marker-region {
+    z-index: 2 !important; /* Marker regions below selection */
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .wavesurfer-handle {
+        width: 12px !important;
+        height: 100%;
+    }
+    
+    .waveform-context-menu {
+        font-size: 16px;
+        min-width: 180px;
+    }
+    
+    .context-menu-item {
+        padding: 12px 20px;
+    }
+}
+
+/* Timeline Marker Regions */
+.timeline-marker-region {
+    position: absolute;
+    top: 18px;
+    height: 24px;
+    background-color: rgba(255, 0, 0, 0.3); /* Red with transparency */
+    border: 1px solid rgba(255, 0, 0, 0.5);
+    border-radius: 2px;
+    pointer-events: all;
+    cursor: pointer;
+    z-index: 1; /* Below selection (z-index: 2) but above track */
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.timeline-marker-region:hover {
+    background-color: rgba(255, 0, 0, 0.4);
+    border-color: rgba(255, 0, 0, 0.7);
+    z-index: 2;
+}
+
+.timeline-marker-region.active {
+    background-color: rgba(255, 0, 0, 0.5);
+    border-color: rgba(255, 0, 0, 0.8);
+    border-width: 2px;
+    box-shadow: 0 0 4px rgba(255, 0, 0, 0.4);
+}
+
+/* Ensure the main selection stays on top and remains blue */
+.main-timeline-selection {
+    z-index: 2;
+    background: rgba(33, 150, 243, 0.3) !important; /* Blue selection */
+}
+
+/* Ensure playhead stays on top */
+.main-timeline-playhead {
+    z-index: 3;
+}
+
+/* Add a subtle animation when marker is loaded */
+@keyframes markerPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 0, 0, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+    }
+}
+
+.timeline-marker-region.pulse {
+    animation: markerPulse 0.5s ease-out;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .timeline-marker-region {
+        top: 14px;
+        height: 22px;
+    }
+}
+
 /* Small mobile devices */
 @media (max-width: 480px) {
     body {
@@ -946,3 +1161,5 @@ h5 {
     flex-grow: 0;
   }
 }
+
+
