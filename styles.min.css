@@ -933,7 +933,6 @@ h5 {
 
 /* Instructions overlay for waveform */
 #waveform-scroll-container::after {
-    content: "Double-click marker to delete • Right-click for options";
     position: absolute;
     bottom: 5px;
     right: 10px;
@@ -1123,6 +1122,33 @@ h5 {
     .tick-label {
         font-size: 7px;
         padding: 0px 1px;
+    }
+}
+
+/* Edit Active Marker Button */
+#edit-active-marker {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+#edit-active-marker:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Responsive layout for marker buttons */
+@media (max-width: 576px) {
+    .d-flex.gap-2 {
+        justify-content: flex-start !important;
+    }
+    
+    #edit-active-marker {
+        order: 5;
+    }
+    
+    #jump-to-in, #jump-to-out {
+        order: 6;
     }
 }
 
