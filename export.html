@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Export</title>
-  <link rel="stylesheet" href="navbar.css">
-  <link rel="stylesheet" href="styles.min.css">
-  <script src="navbar.js" defer></script>
-  
-      <!-- Preconnect to CDN for faster loading -->
+    <title>Supercut and Marker Video Editor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Professional web-based video editing tool for creating precise video clips, managing markers, and working with subtitles.">
+    
+    <!-- Preconnect to CDN for faster loading -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     
@@ -34,33 +32,283 @@
     <button id="open-sidebar-button" aria-label="open sidebar" aria-expanded="false" aria-controls="navbar">
       <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#c9c9c9"><path d="M165.13-254.62q-10.68 0-17.9-7.26-7.23-7.26-7.23-18t7.23-17.86q7.22-7.13 17.9-7.13h629.74q10.68 0 17.9 7.26 7.23 7.26 7.23 18t-7.23 17.87q-7.22 7.12-17.9 7.12H165.13Zm0-200.25q-10.68 0-17.9-7.27-7.23-7.26-7.23-17.99 0-10.74 7.23-17.87 7.22-7.13 17.9-7.13h629.74q10.68 0 17.9 7.27 7.23 7.26 7.23 17.99 0 10.74-7.23 17.87-7.22 7.13-17.9 7.13H165.13Zm0-200.26q-10.68 0-17.9-7.26-7.23-7.26-7.23-18t7.23-17.87q7.22-7.12 17.9-7.12h629.74q10.68 0 17.9 7.26 7.23 7.26 7.23 18t-7.23 17.86q-7.22 7.13-17.9 7.13H165.13Z"/></svg>
     </button>
-
-  <nav id="navbar">
-    <ul>
-      <li>
-        <button id="close-sidebar-button" onclick="closeSidebar()" aria-label="close sidebar">
-          <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#c9c9c9"><path d="m480-444.62-209.69 209.7q-7.23 7.23-17.5 7.42-10.27.19-17.89-7.42-7.61-7.62-7.61-17.7 0-10.07 7.61-17.69L444.62-480l-209.7-209.69q-7.23-7.23-7.42-17.5-.19-10.27 7.42-17.89 7.62-7.61 17.7-7.61 10.07 0 17.69 7.61L480-515.38l209.69-209.7q7.23-7.23 17.5-7.42 10.27-.19 17.89 7.42 7.61 7.62 7.61 17.7 0 10.07-7.61 17.69L515.38-480l209.7 209.69q7.23 7.23 7.42 17.5.19 10.27-7.42 17.89-7.62 7.61-17.7 7.61-10.07 0-17.69-7.61L480-444.62Z"/></svg>
-        </button>
-      </li>
-      <li class="home-li"><b><a href="index.html">HELP</a></b></li>
-      <li><b><a href="editor.html" >EDITOR</a></b></li>
-      <li><b><a href="export.html" class="active-link" aria-current="page">EXPORT</a></b></li>
-      <li><b><a href="tools.html">TOOLS</a></b></li>
-      <li><a class="accent-link" href="https://buymeacoffee.com/ediuseditor">Buy me a coffee</a></li>
-    </ul>
-  </nav>
   
-	<div id="overlay" aria-hidden="true"></div>
+    <nav id="navbar">
+      <ul>
+        <li>
+          <button id="close-sidebar-button" aria-label="close sidebar">
+            <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#c9c9c9"><path d="m480-444.62-209.69 209.7q-7.23 7.23-17.5 7.42-10.27.19-17.89-7.42-7.61-7.62-7.61-17.7 0-10.07 7.61-17.69L444.62-480l-209.7-209.69q-7.23-7.23-7.42-17.5-.19-10.27 7.42-17.89 7.62-7.61 17.7-7.61 10.07 0 17.69 7.61L480-515.38l209.69-209.7q7.23-7.23 17.5-7.42 10.27-.19 17.89 7.42 7.61 7.62 7.61 17.7 0 10.07-7.61 17.69L515.38-480l209.7 209.69q7.23 7.23 7.42 17.5.19 10.27-7.42 17.89-7.62 7.61-17.7 7.61-10.07 0-17.69-7.61L480-444.62Z"/></svg>
+          </button>
+        </li>
+        <li class="home-li"><b><a href="index.html">HELP</a></b></li>
+        <li><b><a href="editor.html" class="active-link" aria-current="page">EDITOR</a></b></li>
+        <li><b><a href="export.html">EXPORT</a></b></li>
+        <li><b><a href="tools.html">TOOLS</a></b></li>
+        <li><a class="accent-link" href="https://buymeacoffee.com/ediuseditor">Buy me a coffee</a></li>
+      </ul>
+    </nav>
+    
+    <div id="overlay" aria-hidden="true"></div>
     <main id="main-content">
     <div class="main-wrapper">
         <div class="container">
             <div class="video-container">
                 <h2 class="my-3 text-center">Supercut and Marker Video Editor</h2>
-	<p>
-	Hello
-	</p>
+                
+                <!-- File upload zone -->
+                <div class="drop-zone" id="file-drop-zone">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label for="video-upload" class="form-label">1. Video File:</label>
+                            <input type="file" id="video-upload" accept="video/*" class="form-control">
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="subtitle-file" class="form-label">2. Subtitle File (Optional):</label>
+                            <input type="file" id="subtitle-file" accept=".srt,.vtt,.txt" class="form-control">
+                        </div>
+                    </div>                  
+                    <div class="form-group my-3">
+                        <label for="json-upload" class="form-label">3. Load Project (JSON) with Waveform data:</label>
+                        <input type="file" id="json-upload" accept=".json" class="form-control">
+                    </div>
+					<p class="mt-3">or drag and drop files here (Video, Subtitles, Project JSON)</p>
+                </div>
+                
+                <!-- Frame rate info -->
+                <div class="d-flex flex-wrap align-items-center my-2 justify-content-start">
+                    <div class="d-flex align-items-center me-3">
+                        <label class="me-1 small">Play to detect - </label>
+                        <span id="detected-fps" class="text-muted small"></span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <label for="framerate-select" class="me-1 small"><b>ALWAYS CHECK THE FRAMERATE:</b></label>
+                        <select id="framerate-select" class="form-select form-select-sm" style="width: auto; min-width: 70px;">
+                            <option value="23.976">23.976</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="29.97" selected>29.97</option>
+                            <option value="30">30</option>
+                            <option value="50">50</option>
+                            <option value="59.94">59.94</option>
+                            <option value="60">60</option>
+                        </select>
+                    </div>
+                </div>
+                    
+                <!-- Video player with subtitle overlay -->
+                <div class="video-wrapper">
+                    <video id="my_video" controls playsinline></video>
+                    <div class="subtitle-display" id="current-subtitle"></div>
+                </div>
+
+                <!-- Video controls -->
+                <div class="d-flex flex-wrap justify-content-between align-items-center my-2">
+                    <div class="d-flex align-items-center flex-grow-1">
+                        <div class="btn-group me-2">
+                            <button id="play-pause" class="btn btn-primary">Play</button>
+                            <!-- Repeat Button -->
+                            <button id="repeat-play" class="btn btn-secondary" title="Loop playback of selected range">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-repeat" viewBox="0 0 16 16">
+                                    <path d="M11 5.466V4H5a4 4 0 0 0-3.584 5.777.5.5 0 1 1-.896.446A5 5 0 0 1 5 3h6V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192Zm3.81 2.088a.5.5 0 0 1 .67.225A5 5 0 0 1 11 13H5v1.466a.25.25 0 0 1-.41.192l-2.36-1.966a.25.25 0 0 1 0-.384l2.36-1.966a.25.25 0 0 1 .41.192V12h6a4 4 0 0 0 3.585-5.777.5.5 0 0 1 .225-.67Z"/>
+                                </svg>
+                            </button>
+                            <button id="stop" class="btn btn-secondary">⏹︎</button>
+                        </div>
+                        <div class="btn-group me-2">
+                            <button id="frame-back" class="btn btn-outline-secondary frame-step">◀</button>
+                            <button id="frame-forward" class="btn btn-outline-secondary frame-step">▶</button>
+                        </div>
+                    </div>
+                    
+                    <div class="time-info ms-auto">
+                        <span>Current: <span id="current-time-value">00:00:00:00</span></span>
+                        <span>/</span>
+                        <span>Total: <span id="duration-time-value">00:00:00:00</span></span>
+                    </div>
+                </div>
+
+                <!-- Main Timeline -->
+                <div class="main-timeline-container" id="main-timeline">
+                    <div class="main-timeline-track"></div>
+                    <div class="main-timeline-selection" id="main-timeline-selection"></div>
+                    <div class="main-timeline-playhead" id="main-timeline-playhead"></div>
+                </div>
+				
+                <!-- Timeline Scale -->
+                <div id="timeline-scale"></div>
+				
+                <!-- Waveform Section -->
+                <div id="waveform-message"></div>
+                <div id="loading-indicator">Processing audio waveform, please wait...</div>
+                <div id="waveform-scroll-container" style="display: none;">
+                    <div id="waveform"></div>
+                </div>
+				
+                <!-- Selection time display -->
+                <div class="time-info my-2 d-flex flex-wrap justify-content-center justify-content-md-start">
+                    <span id="selection-time" class="me-3">IN: 00:00:00:00 - OUT: 00:00:00:00</span>
+                    <span id="selection-duration">Duration: 00:00:00:00</span>
+                </div>					
+        
+                <!-- Markers control buttons -->
+				<div class="d-flex flex-wrap justify-content-center justify-content-md-start align-items-center my-3 gap-2">
+					<button id="set-in-point" class="btn btn-success" title="Set IN point at current position (I)">IN</button>
+					<button id="set-out-point" class="btn btn-danger" title="Set OUT point at current position (O)">OUT</button>
+					<button id="add-marker" class="btn btn-primary" title="Add Marker Range ([)">Add Marker Range</button>
+					<button id="reset-zoom" class="btn btn-warning" title="Reset IN/OUT to full duration (X)">Reset</button>
+					<!-- NEW EDIT MARKER BUTTON -->
+					<button id="edit-active-marker" class="btn btn-info" title="Edit active marker comment" disabled>
+						<span style="font-size: 1.1em;">&#9998;</span> Edit
+					</button>					
+					<!-- Jump to IN/OUT buttons grouped together -->
+					<button id="jump-to-in" class="btn btn-outline-primary" title="Jump to IN point (Q)">[←</button>
+					<button id="jump-to-out" class="btn btn-outline-primary" title="Jump to OUT point (W)">→]</button>
+				</div>				
+				
+				<!-- Custom duration input -->
+                <h5 class="text-center my-3">Precise Range Duration</h5>
+                <div class="row g-3 mb-3 align-items-center">
+				<!-- Playhead position dropdown -->
+                    <div class="col-12 col-xl-4">
+                        <select id="playhead-position" class="form-select">
+                            <option value="in" selected>Set duration with In Point at Playhead</option>
+                            <option value="out">Set duration with Out Point at Playhead</option>
+                            <option value="mid">Set duration with Mid Point at Playhead</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-xl-5">
+                        <div class="custom-duration-group" id="custom-duration-input">
+                            <div class="duration-row">
+                                <input type="number" id="minutes-input" class="form-control" min="0" value="0" style="min-width:68px; max-width:70px;">
+                                <span class="input-group-text">mins</span>
+                            </div>
+                            <div class="duration-separator">
+                                <span class="input-group-text">:</span>
+                            </div>
+                            <div class="duration-row">
+                                <input type="number" id="seconds-input" class="form-control" min="0" max="59" value="0" style="min-width:60px; max-width:70px;">
+                                <span class="input-group-text">secs</span>
+                            </div>
+                            <div class="duration-separator">
+                                <span class="input-group-text">:</span>
+                            </div>
+                            <div class="duration-row">
+                                <input type="number" id="frames-input" class="form-control" min="0" value="0" style="min-width:60px; max-width:70px;">
+                                <span class="input-group-text">frames</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- NEW: SET Button for Precise Range -->
+                    <div class="col-12 col-xl-3">
+                        <button id="set-precise-range" class="btn btn-success w-100" title="Apply the precise range duration to IN/OUT points">
+                            SET
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tabbed interface for markers and transcript -->
+                <ul class="nav nav-tabs" id="content-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="markers-tab" data-bs-toggle="tab" data-bs-target="#markers-content" type="button" role="tab">Markers</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="transcript-tab" data-bs-toggle="tab" data-bs-target="#transcript-content" type="button" role="tab">Transcript</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="content-tabs-content">
+                    <!-- Markers Tab -->
+                    <div class="tab-pane fade show active" id="markers-content" role="tabpanel">
+
+                        <!-- Custom Path UI -->
+                        <div class="form-group my-3">
+                            <label for="custom-path" class="form-label">Path for video files in JSON:</label>
+                            <div class="input-group mb-2">
+                                <input type="text" id="custom-path" class="form-control" placeholder="e.g., C:/Projects/MyVideo/">
+                                <button id="save-path" class="btn btn-outline-secondary">Save Path</button>
+                            </div>
+                            <label for="saved-paths" class="visually-hidden">Saved Paths</label>
+                            <select id="saved-paths" class="form-select">
+                                <option value="">-- Select saved path --</option>
+                            </select>
+                        </div>
+                        <div class="d-flex flex-wrap justify-content-between align-items-center my-3">
+                            <div>
+                                <button id="save-json" class="btn btn-primary mb-2 mb-lg-0">Save Project to JSON</button>
+                            </div>
+                        </div>
+                        <div class="form-group my-3">
+                            <label for="marker-search" class="form-label">Search Markers:</label>
+                            <div class="search-input-wrapper">
+                                <input type="text" id="marker-search" class="form-control" placeholder="Search marker comments...">
+                                <button class="search-clear-btn" id="marker-search-clear-btn" title="Clear search">×</button>
+                            </div>
+                        </div>
+                        <div id="markers-list" class="mt-3"></div>
+                    </div>
+                    
+                    <!-- Transcript Tab -->
+                    <div class="tab-pane fade" id="transcript-content" role="tabpanel">
+                        <div class="transcript-container">
+                            <!-- Search container -->
+                            <div class="search-container my-3">
+                                <div class="search-box d-flex">
+                                    <div class="search-input-wrapper flex-grow-1">
+                                        <label for="search-box" class="visually-hidden">Search Subtitles</label>
+                                        <input type="text" id="search-box" class="form-control" placeholder="Search subtitles...">
+                                        <button class="search-clear-btn" id="search-clear-btn" title="Clear search">×</button>
+                                    </div>
+                                    <button id="add-search-markers" class="btn btn-success ms-2" title="Add all search results as markers" style="display: none;">
+                                        Add as markers
+                                    </button>
+                                </div>
+                                <div class="search-navigation" id="search-navigation" style="display: none;">
+                                    <span id="search-count" class="text-muted me-2">0 results</span>
+                                    <button id="prev-match" class="btn btn-sm btn-outline-secondary me-1" title="Previous match">↑</button>
+                                    <button id="next-match" class="btn btn-sm btn-outline-secondary" title="Next match">↓</button>
+                                </div>
+                            </div>
+
+                            <!-- Search Padding Options -->
+                            <div class="search-options">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="apply-search-padding">
+                                    <label class="form-check-label" for="apply-search-padding">
+                                        Apply Padding to Search Markers
+                                    </label>
+                                </div>
+                                <small class="text-muted ms-auto" id="padding-info" style="display: none;">(Uses the 'Precise Range Duration')</small>
+                            </div>
+                            
+                            <div class="subtitle-list" id="subtitle-list">
+                                <p class="info-text">Load a video and subtitle file to see the transcript here.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </main>
-  
+    </main>
+    
+    <!-- External JavaScript Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/6.6.3/wavesurfer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/6.6.3/plugin/wavesurfer.regions.min.js"></script>
+    
+    <!-- Custom JavaScript (minified) -->
+    <script src="app.min.js"></script>
+    <script src="navbar.js" defer></script>
+    
+    <!-- Optional: Service Worker for PWA support -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(() => {});
+            });
+        }
+    </script>
 </body>
 </html>
