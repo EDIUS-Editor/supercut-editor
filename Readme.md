@@ -1,10 +1,10 @@
 # Supercut and Marker Video Editor
 
-A professional web-based video editing tool for creating precise video clips, creating or managing video markers, and working with subtitles. Perfect for creating supercuts, highlight reels, montages and for removing or joining to together words or phrasings with frame-accurate timing.
-Uploading SRT subtitles or word-level timestamps VTT subtitles will be display on both the video player and the transcript tab for searching a word, phrase, "uhs" or "ums", non-speech sounds e.g. "[applause]" and "[laughter]", or a speaker. 
-Click on any word or phrase to seek to that exact moment on the video and it automatically sets IN and OUT to be added to a edit/marker list.
-Non-destructive editing, original video files remain untouched. All video files are privately playback directly on the user's computer, no video or data is uploaded to unknown servers. 
-Save and restore complete editing sessions to a JSON file on your computer which can be later converted to FCP7XML project file or video markers list. No data is saved on our servers.
+A professional web-based video editing tool for creating precise video clips, creating or managing video markers, and working with subtitles. Perfect for creating supercuts, highlight reels, montages, and for removing or joining to together words or phrases together with frame-accurate timing.
+Uploading SRT subtitles or word-level timestamps, VTT subtitles will be displayed on both the video player and the transcript tab for searching a word, phrase, "uhs" or "ums", non-speech sounds e.g. "[applause]" and "[laughter]", or a speaker. 
+Click on any word or phrase to seek to that exact moment on the video, and it automatically sets IN and OUT to be added to an edit/marker list.
+Non-destructive editing, original video files remain untouched. All video files are privately playback directly on the user's computer; no video or data is uploaded to unknown servers. 
+Save and restore complete editing sessions to a JSON file on your computer, which can be later converted to an FCP7XML project file or a video markers list. No data is saved on our servers.
 
 ## 🎯 **Core Features**
 
