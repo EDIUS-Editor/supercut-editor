@@ -103,7 +103,7 @@ Save and restore complete editing sessions to a JSON file on your computer which
       "id": "1",
       "start": 90,
       "end": 155,
-      "subtitles": [{ "text": "subtitle text", "start": 90, "end": 155 }]
+      "comments": [{ "text": "subtitle text", "start": 90, "end": 155 }]
     }
   ],
   "waveform": {
