@@ -674,42 +674,44 @@ h5 {
     animation: clickPulse 0.3s ease-out;
 }
 
-/* Timeline Scale Styling */
-#timeline-scale {
-    position: relative;
-    width: 100%;
-    height: 25px;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    overflow: hidden;
-    background: linear-gradient(to bottom, transparent 0%, transparent 70%, #f0f0f0 70%, #f0f0f0 100%);
-    border-radius: 0 0 4px 4px;
+/* Region Navigation Styling */
+.region-navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0 15px 0;
+    padding: 8px;
+    background: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 4px;
 }
 
-.tick {
-    position: absolute;
-    bottom: 15px;
-    width: 1px;
-    height: 8px;
-    background-color: #666;
-    z-index: 1;
-}
-
-.tick-label {
-    position: absolute;
-    bottom: 0px;
-    font-size: 10px;
-    font-family: 'Courier New', monospace;
-    color: #333;
+.region-nav-info {
+    color: #666;
+    font-size: 14px;
     font-weight: 500;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 1px 3px;
-    border-radius: 2px;
-    border: 1px solid #ccc;
-    z-index: 2;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+#prev-marker-btn, #next-marker-btn {
+    min-width: 140px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 576px) {
+    .region-navigation {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .region-nav-info {
+        width: 100%;
+        text-align: center;
+        margin: 0;
+    }
+    
+    #prev-marker-btn, #next-marker-btn {
+        flex: 1;
+        min-width: 120px;
+    }
 }
 
 /* Responsive adjustments */
