@@ -84,7 +84,7 @@ body {
 /* Subtitle display styling */
 .subtitle-display {
     position: absolute;
-    bottom: 70px;
+    bottom: 50px;
     left: 0;
     right: 0;
     text-align: center;
@@ -99,11 +99,26 @@ body {
     border-radius: 4px;
 }
 
+/* Hide the timeline/seek bar on HTML5 video */
+video::-webkit-media-controls-timeline {
+    display: none !important;
+}
+
+video::-moz-media-controls-timeline {
+    display: none !important;
+}
+
+/* Optional: Also hide the time display if desired */
+video::-webkit-media-controls-current-time-display,
+video::-webkit-media-controls-time-remaining-display {
+    display: none !important;
+}
+
 /* Main Timeline elements */
 .main-timeline-container {
     position: relative;
-    margin: 10px 0;
-    height: 55px;
+    margin: 20px 0;
+    height: 45px;
     width: 100%;
     background: var(--timeline-bg);
     border-radius: var(--border-radius);
@@ -132,9 +147,9 @@ body {
 
 .main-timeline-playhead {
     position: absolute;
-    top: 15px;
+    top: 5px;
     width: 3px;
-    height: 30px;
+    height: 40px;
     background: var(--primary-color);
     transform: translateX(-50%);
     cursor: ew-resize;
@@ -154,19 +169,6 @@ body {
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
     border-top: 8px solid var(--primary-color);
-}
-
-.main-timeline-playhead::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0; 
-    height: 0; 
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 8px solid var(--primary-color);
 }
 
 /* Time info displays */
@@ -731,7 +733,7 @@ h5 {
     .subtitle-display {
         font-size: 16px;
         padding: 8px;
-        bottom: 60px;
+        bottom: 40px;
     }
     
     .btn-group {
@@ -743,7 +745,7 @@ h5 {
     }
     
     .main-timeline-container {
-        height: 50px;
+        height: 38px;
     }
     
     .main-timeline-track {
@@ -756,8 +758,8 @@ h5 {
     }
     
     .main-timeline-playhead {
-        top: 10px;
-        height: 30px;
+        top: 5px;
+        height: 35px;
     }
     
     .btn {
@@ -778,20 +780,6 @@ h5 {
     .marker-actions .btn {
         padding: 4px 8px;
         font-size: 12px;
-    }
-    
-    #timeline-scale {
-        height: 20px;
-    }
-    
-    .tick {
-        height: 6px;
-        bottom: 12px;
-    }
-    
-    .tick-label {
-        font-size: 8px;
-        padding: 0px 2px;
     }
 }
 
