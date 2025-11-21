@@ -1,32 +1,120 @@
-/* CSS Variables for consistent colors and values */
+/* styles.min.css */
+
+/* ==========================================================================
+    1. CSS Variables for Theming (Light & Dark)
+========================================================================== 
+*/
+
 :root {
+    /* Color Palette */
     --primary-color: #2196F3;
     --primary-dark: #1976D2;
+    --primary-light-transparent: rgba(33, 150, 243, 0.3);
+    --primary-very-light: #e3f2fd;
     --secondary-color: #4CAF50;
     --secondary-dark: #43A047;
-    --light-bg: #f8f9fa;
-    --lighter-bg: #e9ecef;
-    --timeline-bg: #d0d0d0;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --info-dark: #138496;
+    --success-color: #28a745;
+
+    /* Backgrounds */
+    --bg-body: linear-gradient(135deg, #0d8b8e 0%, #0f585e 100%);
+    --bg-main: #ffffff;
+    --bg-light: #f8f9fa;
+    --bg-lighter: #e9ecef;
+    --bg-timeline: #d0d0d0;
+    --bg-input: #ffffff;
+    --bg-transcript-tab: #e8e8e8;
+    --bg-hover: #f0f0f0;
+    --bg-active: #e0f0ff;
+    --bg-wave-container: #fff;
+    --bg-wave-message: #f8f9fa;
+
+    /* Text */
+    --text-color: #212529;
+    --text-muted: #6c757d;
+    --text-header: #333;
+    --text-header-light: #555;
+    --text-link: #000000;
+    --text-light: #ffffff;
+    --text-on-accent: #000;
+
+    /* Borders & Shadows */
+    --border-color: #dee2e6;
+    --border-color-light: #ddd;
+    --border-color-input: #ddd;
+    --border-focus-color: var(--primary-color);
+    --focus-shadow: 0 0 0 0.2rem rgba(33, 150, 243, 0.25);
+    --box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    --btn-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --btn-shadow-hover: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+    /* Search/Highlight */
+    --highlight-match: #ffff99;
+    --highlight-current-match: #ffa500;
+
+    /* Other */
     --border-radius: 4px;
     --transition-speed: 0.2s;
-    --transcript-tab-bg: #e8e8e8;
 }
 
-/* Base container and components */
+[data-theme="dark"] {
+    /* Backgrounds */
+    --bg-body: #121212;
+    --bg-main: #1e1e1e;
+    --bg-light: #2a2a2a;
+    --bg-lighter: #3a3a3a;
+    --bg-timeline: #454545;
+    --bg-input: #333333;
+    --bg-transcript-tab: #303030;
+    --bg-hover: #3f3f3f;
+    --bg-active: rgba(33, 150, 243, 0.2);
+    --bg-wave-container: #2c2c2c;
+    --bg-wave-message: #2a2a2a;
+
+    /* Text */
+    --text-color: #e0e0e0;
+    --text-muted: #9e9e9e;
+    --text-header: #f1f1f1;
+    --text-header-light: #cccccc;
+    --text-link: #e0e0e0;
+    
+    /* Borders & Shadows */
+    --border-color: #444;
+    --border-color-light: #555;
+    --border-color-input: #555;
+    --focus-shadow: 0 0 0 0.2rem rgba(33, 150, 243, 0.4);
+    --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    --btn-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --btn-shadow-hover: 0 4px 8px rgba(0, 0, 0, 0.4);
+
+    /* Search/Highlight */
+    --highlight-match: #b0a500;
+    --highlight-current-match: #d18700;
+}
+
+/* ==========================================================================
+    2. General Styles
+========================================================================== 
+*/
+
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    background: linear-gradient(135deg, #0d8b8e 0%, #0f585e 100%);
+    background: var(--bg-body);
     min-height: 100vh;
     padding: 20px;
     overflow-x: hidden;
     margin: 0;
+    color: var(--text-color);
 }
 
 .main-wrapper {
-    background: white;
+    background: var(--bg-main);
     border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--box-shadow);
     padding: 40px;
     max-width: 1200px;
     width: 100%;
@@ -40,157 +128,57 @@ body {
     margin: 0;
 }
 
-/* Custom style for file input buttons for better contrast */
+h2 {
+    color: var(--text-header);
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+h5 {
+    color: var(--text-header-light);
+    font-weight: 500;
+}
+
+/* ==========================================================================
+    3. Forms & Inputs
+========================================================================== 
+*/
+
+.form-control, .form-select {
+    width: 100%;
+    border-radius: 8px;
+    background-color: var(--bg-input);
+    color: var(--text-color);
+    border: 1px solid var(--border-color-input);
+    transition: all 0.2s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--border-focus-color);
+    box-shadow: var(--focus-shadow);
+}
+
 .form-control::file-selector-button {
-    background-color: #d0d0d0;
-    border-color: #c0c0c0;
-    color: #333;
+    background-color: var(--bg-timeline);
+    border-color: var(--border-color);
+    color: var(--text-color);
     transition: background-color 0.2s ease-in-out;
 }
 
-  .form-control::file-selector-button:hover {
-      background-color: #c0c0c0; / Slightly darker grey on hover /
-  }
-
-.video-container {
-    width: 100%;
-    padding: 0;
-    margin: 0 auto;
-    box-sizing: border-box;
+.form-control::file-selector-button:hover {
+    background-color: var(--border-color);
 }
 
-.video-controls, .marker-item { 
-    background: var(--light-bg); 
-    border-radius: var(--border-radius); 
-    padding: 10px; 
-    margin: 10px 0; 
-    width: 100%;
-}
-
-/* Video styling */
-.video-wrapper { 
-    position: relative; 
-    margin-bottom: 15px; 
-    width: 100%;
-}
-
-#my_video {
-    width: 100%;
-    background: #000;
-    border-radius: var(--border-radius);
-    display: block;
-}
-
-/* Subtitle display styling */
-.subtitle-display {
-    position: absolute;
-    bottom: 50px;
-    left: 0;
-    right: 0;
-    text-align: center;
-    color: white;
-    text-shadow: 0px 0px 0px #000;
-    font-size: 18px;
-    padding: 10px;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 10;
-    max-width: 90%;
-    margin: 0 auto;
-    border-radius: 4px;
-}
-
-/* Hide the timeline/seek bar on HTML5 video */
-video::-webkit-media-controls-timeline {
-    display: none !important;
-}
-
-video::-moz-media-controls-timeline {
-    display: none !important;
-}
-
-/* Optional: Also hide the time display if desired */
-video::-webkit-media-controls-current-time-display,
-video::-webkit-media-controls-time-remaining-display {
-    display: none !important;
-}
-
-/* Main Timeline elements */
-.main-timeline-container {
-    position: relative;
-    margin: 20px 0;
-    height: 45px;
-    width: 100%;
-    background: var(--timeline-bg);
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    user-select: none;
-}
-
-.main-timeline-track {
-    position: absolute;
-    top: 20px;
-    left: 0;
-    right: 0;
-    height: 20px;
-    background: var(--timeline-bg);
-    border-radius: var(--border-radius);
-}
-
-.main-timeline-selection {
-    position: absolute;
-    top: 20px;
-    height: 20px;
-    background: rgba(33, 150, 243, 0.3);
-    border-radius: var(--border-radius);
-    pointer-events: none;
-}
-
-.main-timeline-playhead {
-    position: absolute;
-    top: 5px;
-    width: 3px;
-    height: 40px;
-    background: var(--primary-color);
-    transform: translateX(-50%);
-    cursor: ew-resize;
-    z-index: 3;
-    pointer-events: none;
-    border-radius: 2px;
-}
-
-.main-timeline-playhead::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0; 
-    height: 0; 
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-top: 8px solid var(--primary-color);
-}
-
-/* Time info displays */
-.time-info {
-    display: flex;
-    gap: 15px;
-    font-family: monospace;
-    font-size: 14px;
-    margin: 5px 0;
-    flex-wrap: wrap;
-}
-
-/* Drop zone styling */
 .drop-zone {
-    border: 2px dashed #ccc;
+    border: 2px dashed var(--border-color);
     border-radius: var(--border-radius);
     padding: 20px;
     text-align: center;
     transition: border var(--transition-speed) ease-in-out;
     margin-bottom: 20px;
     width: 100%;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(128, 128, 128, 0.1);
 }
 
 .drop-zone.drag-over {
@@ -198,284 +186,162 @@ video::-webkit-media-controls-time-remaining-display {
     background-color: rgba(33, 150, 243, 0.1);
 }
 
-.drop-zone p {
-    margin: 0;
-    color: #666;
+.drop-zone p { margin: 0; color: var(--text-muted); }
+
+/* Custom Duration Input */
+.custom-duration-group .duration-row { display: flex; }
+.custom-duration-group .duration-row input.form-control { flex-grow: 1; min-width: 50px; }
+.custom-duration-group .duration-separator { display: flex; justify-content: center; }
+.custom-duration-group > div { margin-bottom: 5px; }
+@media (min-width: 480px) {
+  .custom-duration-group { display: flex; flex-wrap: nowrap; align-items: center; width: 100%; }
+  .custom-duration-group > div { margin-bottom: 0; }
+  .custom-duration-group .duration-row { flex-grow: 1; }
+  .custom-duration-group .duration-separator { flex-grow: 0; }
 }
 
-/* Button styling */
+/* ==========================================================================
+    4. Buttons
+========================================================================== 
+*/
+
 .btn {
     white-space: nowrap;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--btn-shadow);
     transition: all 0.2s ease;
 }
-
 .btn:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--btn-shadow-hover);
+}
+.btn-group { display: flex; flex-wrap: wrap; gap: 5px; width: 100%; }
+.btn-group .btn { flex: 1 1 auto; min-width: fit-content; }
+.frame-step { padding: 4px 6px; font-size: 12px; min-width: 40px; }
+
+/* Invert bootstrap outline button for dark mode */
+[data-theme="dark"] .btn-outline-secondary {
+    color: #ccc;
+    border-color: #555;
+}
+[data-theme="dark"] .btn-outline-secondary:hover {
+    color: #fff;
+    background-color: #444;
+    border-color: #555;
+}
+[data-theme="dark"] .btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+[data-theme="dark"] .btn-outline-primary:hover {
+    color: #fff;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
-.btn-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    width: 100%;
-}
-
-.btn-group .btn {
-    flex: 1 1 auto;
-    min-width: fit-content;
-}
-
-.frame-step {
-    padding: 4px 6px;
-    font-size: 12px;
-    min-width: 40px;
-}
-
-/* Repeat button styling */
 #repeat-play.active {
     background-color: var(--primary-dark);
     border-color: var(--primary-dark);
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* Transcript styling */
-.subtitle-list {
-    height: 200px;
-    overflow-y: auto;
-    border: 1px solid #ddd;
-    padding: 10px;
-    resize: vertical;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-    width: 100%;
-}
-
-.subtitle-item {
-    padding: 5px;
-    cursor: pointer;
-    margin-bottom: 8px;
-    border-bottom: 1px solid #eee;
-    width: 100%;
-}
-
-.subtitle-item:hover {
-    background-color: #f0f0f0;
-}
-
-.subtitle-item.active, .transcript-segment.active {
-    background-color: #e0f0ff;
-    border-radius: 4px;
-}
-
-.time-stamp {
-    color: #666;
-    font-size: 12px;
-    margin-right: 10px;
-    display: inline-block;
-}
-
-.transcript-segment {
-    margin-bottom: 8px;
-    padding: 5px;
-    border-bottom: 1px solid #eee;
-    width: 100%;
-}
-
-.transcript-word {
-    cursor: pointer;
-    padding: 2px 0;
-    margin: 0 1px;
-    display: inline-block;
-}
-
-.transcript-word:hover {
-    background-color: #f0f0f0;
-    border-radius: 3px;
-}
-
-.video-subtitle-word {
-    padding: 0 2px;
-    border-radius: 3px;
-    transition: background-color 0.1s ease, color 0.1s ease;
-}
-
-.word-active {
-    background-color: yellow;
-    color: black;
+#jump-to-in, #jump-to-out {
     font-weight: bold;
-    border-radius: 3px;
+    min-width: 45px;
+	max-width: 45px;
+    font-family: 'Courier New', monospace;
+}
+#edit-active-marker { display: inline-flex; align-items: center; gap: 4px; }
+#edit-active-marker:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ==========================================================================
+    5. Video & Timeline
+========================================================================== 
+*/
+
+.video-wrapper { position: relative; margin-bottom: 15px; width: 100%; }
+#my_video { width: 100%; background: #000; border-radius: var(--border-radius); display: block; }
+.subtitle-display {
+    position: absolute; bottom: 50px; left: 0; right: 0; text-align: center;
+    color: white; font-size: 18px;
+    padding: 10px; background-color: rgba(0, 0, 0, 0.6); z-index: 10;
+    max-width: 90%; margin: 0 auto; border-radius: 4px;
 }
 
-.search-match {
-    background-color: #ffff99;
-    border-radius: 3px;
+/* Main Timeline */
+.main-timeline-container {
+    position: relative; margin: 20px 0; height: 45px; width: 100%;
+    background: var(--bg-timeline); border-radius: var(--border-radius);
+    cursor: pointer; user-select: none;
 }
-
-.current-match {
-    background-color: #ffa500 !important;
-    font-weight: bold;
-    border-radius: 3px;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
-}
-
-.search-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 15px;
-    width: 100%;
-}
-
-/* Container for search padding checkbox */
-.search-options {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    padding: 5px;
-    background-color: #e0e0e0;
+.main-timeline-track {
+    position: absolute; top: 20px; left: 0; right: 0;
+    height: 20px; background: var(--bg-timeline);
     border-radius: var(--border-radius);
-    margin-top: -10px;
-    margin-bottom: 10px;
+}
+.main-timeline-selection {
+    position: absolute; top: 20px; height: 20px;
+    background: var(--primary-light-transparent); border-radius: var(--border-radius);
+    pointer-events: none; z-index: 2;
+}
+.main-timeline-playhead {
+    position: absolute; top: 5px; width: 3px; height: 40px;
+    background: var(--primary-color); transform: translateX(-50%);
+    cursor: ew-resize; z-index: 3; pointer-events: none; border-radius: 2px;
+}
+.main-timeline-playhead::before {
+    content: ''; position: absolute; top: -8px; left: 50%;
+    transform: translateX(-50%); width: 0; height: 0; 
+    border-left: 8px solid transparent; border-right: 8px solid transparent;
+    border-top: 8px solid var(--primary-color);
+}
+.time-info {
+    display: flex; gap: 15px; font-family: monospace;
+    font-size: 14px; margin: 5px 0; flex-wrap: wrap;
 }
 
-.search-box {
-    flex: 1 1 auto;
-    min-width: 150px;
-    width: 100%;
-    position: relative;
-}
+/* ==========================================================================
+    6. Tabs, Transcript & Markers
+========================================================================== 
+*/
 
-.search-input-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
+/* Tabs */
+.nav-tabs { width: 100%; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); }
+.nav-tabs .nav-link {
+    margin-bottom: -1px; border: 1px solid transparent; border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem; cursor: pointer; transition: all 0.2s ease;
+    color: var(--text-muted);
 }
+.nav-tabs .nav-link.active {
+    color: var(--text-color); background-color: var(--bg-main);
+    border-color: var(--border-color) var(--border-color) var(--bg-main);
+}
+.nav-tabs .nav-link#transcript-tab { background-color: var(--bg-transcript-tab); }
+.nav-tabs .nav-link#transcript-tab.active { color: var(--text-color); background-color: var(--bg-main); }
+.nav-tabs .nav-link#transcript-tab:hover:not(.active) { background-color: var(--bg-timeline); }
 
-.search-clear-btn {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    font-size: 16px;
-    color: #666;
-    cursor: pointer;
-    padding: 2px;
-    display: none;
-    z-index: 10;
+/* Transcript & Subtitles */
+.subtitle-list {
+    height: 200px; overflow-y: auto; border: 1px solid var(--border-color-light);
+    padding: 10px; resize: vertical; border-radius: 4px;
+    background-color: var(--bg-input); width: 100%;
 }
-
-.search-clear-btn:hover {
-    color: #333;
-}
-
-.search-navigation {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-/* Marker styles */
-.marker-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: background-color var(--transition-speed);
-    width: 100%;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.marker-item.active {
-    background: #e3f2fd;
-    border-left: 3px solid var(--primary-color);
-}
-
-.marker-label { 
-    cursor: pointer; 
-    flex: 1;
-    overflow-wrap: break-word;
-    word-break: break-word;
-}
-
-.marker-actions { 
-    display: flex; 
-    gap: 5px; 
-    flex-wrap: nowrap;
-}
-
-.marker-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-
-.marker-comment {
-    padding: 8px;
-    background-color: #f8f9fa;
-    border-radius: 4px;
-    margin-top: 5px;
-    max-height: 60px;
-    overflow-y: auto;
-    font-size: 0.9rem;
-    width: 100%;
-    border-left: 3px solid #e9ecef;
-}
-
-.edit-marker {
-    background-color: #17a2b8;
-    border-color: #17a2b8;
-    color: white;
-}
-
-.edit-marker:hover {
-    background-color: #138496;
-    border-color: #117a8b;
-}
-
-.marker-edit-form {
-    padding: 10px;
-    background-color: #f8f9fa;
-    border-radius: 4px;
-    margin-top: 5px;
-    border-left: 3px solid var(--primary-color);
-}
-
-/* Form elements */
-.form-control, .form-select {
-    width: 100%;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    transition: all 0.2s ease;
-}
-
-.form-control:focus, .form-select:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.2rem rgba(33, 150, 243, 0.25);
-}
-
-.input-group {
-    width: 100%;
-}
-
-.input-group > .form-control,
-.input-group > .btn {
-    min-height: 38px;
-}
+.subtitle-item { padding: 5px; cursor: pointer; margin-bottom: 8px; border-bottom: 1px solid var(--border-color); width: 100%; }
+.subtitle-item:hover { background-color: var(--bg-hover); }
+.subtitle-item.active, .transcript-segment.active { background-color: var(--bg-active); border-radius: 4px; }
+.time-stamp { color: var(--text-muted); font-size: 12px; margin-right: 10px; display: inline-block; }
+.transcript-word { cursor: pointer; padding: 2px 0; margin: 0 1px; display: inline-block; }
+.transcript-word:hover { background-color: var(--bg-hover); border-radius: 3px; }
+.word-active { background-color: yellow; color: black; font-weight: bold; border-radius: 3px; }
+.info-text { color: var(--text-muted); font-style: italic; }
 
 /* Create marker from subtitle button */
 .create-marker-from-subtitle {
     font-size: 14px;
     padding: 2px 6px;
-    color: #fff;
+    color: var(--text-light);
     background-color: var(--secondary-color);
     border: none;
     border-radius: var(--border-radius);
@@ -493,327 +359,159 @@ video::-webkit-media-controls-time-remaining-display {
     background-color: var(--secondary-dark);
 }
 
-.info-text {
-    color: #666;
-    font-style: italic;
+/* Search */
+.search-match { background-color: var(--highlight-match); color: var(--text-on-accent); border-radius: 3px; }
+.current-match { background-color: var(--highlight-current-match) !important; font-weight: bold; border-radius: 3px; box-shadow: 0 0 3px rgba(0, 0, 0, 0.3); }
+.search-container { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; width: 100%; }
+.search-options {
+    display: flex; align-items: center; gap: 10px; width: 100%; padding: 5px;
+    background-color: var(--bg-lighter); border-radius: var(--border-radius);
+    margin-top: -10px; margin-bottom: 10px;
 }
+.search-input-wrapper { position: relative; display: flex; align-items: center; flex-grow: 1; }
+.search-clear-btn {
+    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; font-size: 16px; color: var(--text-muted);
+    cursor: pointer; padding: 2px; display: none; z-index: 10;
+}
+.search-clear-btn:hover { color: var(--text-color); }
+.search-navigation { display: flex; align-items: center; gap: 5px; }
 
-/* Tab styling */
-.nav-tabs {
-    width: 100%;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #dee2e6;
+/* Markers */
+.marker-item { 
+    background: var(--bg-light); border-radius: var(--border-radius); padding: 10px; margin: 10px 0; 
+    width: 100%; display: flex; justify-content: space-between; align-items: center;
+    transition: background-color var(--transition-speed); flex-direction: column; align-items: flex-start;
 }
+.marker-item.active { background: var(--bg-active); border-left: 3px solid var(--primary-color); }
+.marker-label { cursor: pointer; flex: 1; overflow-wrap: break-word; word-break: break-word; }
+.marker-actions { display: flex; gap: 5px; flex-wrap: nowrap; }
+.marker-header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.marker-comment {
+    padding: 8px; background-color: var(--bg-main); border-radius: 4px; margin-top: 5px;
+    max-height: 60px; overflow-y: auto; font-size: 0.9rem; width: 100%;
+    border-left: 3px solid var(--bg-lighter);
+}
+.edit-marker { background-color: var(--info-color); border-color: var(--info-color); color: white; }
+.edit-marker:hover { background-color: var(--info-dark); border-color: var(--info-dark); }
+.marker-edit-form { padding: 10px; background-color: var(--bg-light); border-radius: 4px; margin-top: 5px; border-left: 3px solid var(--primary-color); }
+.marker-item.editing { background: linear-gradient(90deg, var(--bg-active) 0%, var(--bg-light) 100%); border-left: 4px solid var(--primary-color); }
 
-.nav-tabs .nav-link {
-    margin-bottom: -1px;
-    border: 1px solid transparent;
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.nav-tabs .nav-link.active {
-    color: #495057;
-    background-color: #fff;
-    border-color: #dee2e6 #dee2e6 #fff;
-}
-
-/* Transcript tab specific styling */
-.nav-tabs .nav-link#transcript-tab {
-    background-color: var(--transcript-tab-bg);
-    color: #666;
-}
-
-.nav-tabs .nav-link#transcript-tab.active {
-    background-color: #fff;
-    color: #495057;
-}
-
-.nav-tabs .nav-link#transcript-tab:hover:not(.active) {
-    background-color: #ddd;
-}
-
-.tab-content {
-    width: 100%;
-}
-
-.tab-pane {
-    width: 100%;
-}
-
-/* Header styling */
-h2 {
-    color: #333;
-    text-align: center;
-    margin-bottom: 30px;
-    font-weight: 600;
-}
-
-h5 {
-    color: #555;
-    font-weight: 500;
-}
-
-/* Waveform Styling */
-#waveform-container {
-    position: relative;
-    width: 100%;
-    height: 128px;
-    background: #f5f5f5;
-    border-radius: 5px;
-}
+/* ==========================================================================
+    7. Waveform
+========================================================================== 
+*/
 
 #waveform-scroll-container {
-    position: relative;
-    width: 100%;
-    overflow-x: auto;
-    margin-top: 10px;
-    margin-bottom: 15px;
-    border: 2px solid #ddd;
-    border-radius: 6px;
-    background: #fff;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-color) var(--lighter-bg);
+    position: relative; width: 100%; overflow-x: auto; margin-top: 10px; margin-bottom: 15px;
+    border: 2px solid var(--border-color-light); border-radius: 6px; background: var(--bg-wave-container);
+    cursor: pointer; transition: all 0.2s ease; scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) var(--bg-lighter);
 }
+#waveform-scroll-container:hover { border-color: var(--primary-color); box-shadow: 0 0 8px rgba(33, 150, 243, 0.4); }
+#waveform-scroll-container::-webkit-scrollbar { height: 8px; }
+#waveform-scroll-container::-webkit-scrollbar-track { background: var(--bg-lighter); border-radius: 4px; }
+#waveform-scroll-container::-webkit-scrollbar-thumb { background-color: var(--primary-color); border-radius: 4px; }
 
-#waveform-scroll-container:hover {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 8px rgba(33, 150, 243, 0.4);
-    transform: translateY(-1px);
-}
-
-#waveform-scroll-container::before {
-    content: "Click anywhere to seek";
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    font-size: 11px;
-    color: #666;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 2px 6px;
-    border-radius: 3px;
-    z-index: 10;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    pointer-events: none;
-}
-
-#waveform-scroll-container:hover::before {
-    opacity: 1;
-}
-
-#waveform-scroll-container::-webkit-scrollbar {
-    height: 8px;
-}
-
-#waveform-scroll-container::-webkit-scrollbar-track {
-    background: var(--lighter-bg);
-    border-radius: 4px;
-}
-
-#waveform-scroll-container::-webkit-scrollbar-thumb {
-    background-color: var(--primary-color);
-    border-radius: 4px;
-}
-
-#waveform {
-    width: 100%;
-    min-height: 128px;
-    position: relative;
-}
-
-/* Enhanced waveform interaction styling */
-#waveform canvas {
-    cursor: pointer !important;
-    transition: opacity 0.1s ease;
-}
-
-#waveform canvas:hover {
-    opacity: 0.9;
-}
-
-#waveform canvas:active {
-    opacity: 0.8;
-}
-
-/* Loading and message styling */
+#waveform { width: 100%; min-height: 128px; position: relative; }
 #waveform-message {
-    display: none;
-    margin: 10px 0;
-    padding: 12px;
-    background-color: #f8f9fa;
-    border-radius: 6px;
-    text-align: center;
-    font-weight: 500;
-    border-left: 4px solid #28a745;
+    display: none; margin: 10px 0; padding: 12px; background-color: var(--bg-wave-message);
+    border-radius: 6px; text-align: center; font-weight: 500;
+    border-left: 4px solid var(--success-color);
 }
-
-#loading-indicator {
-    display: none;
-    color: #4285f4;
-    margin: 10px 0;
-    text-align: center;
-    font-weight: 500;
-}
-
-/* Animation for click feedback */
-@keyframes clickPulse {
-    0% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
-    }
-    100% {
-        transform: translate(-50%, -50%) scale(3);
-        opacity: 0;
-    }
-}
-
-.waveform-click-indicator {
-    animation: clickPulse 0.3s ease-out;
-}
-
-/* Region Navigation Styling */
+#loading-indicator { display: none; color: var(--primary-color); margin: 10px 0; text-align: center; font-weight: 500; }
 .region-navigation {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 10px 0 15px 0;
-    padding: 8px;
-    background: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
+    display: flex; justify-content: center; align-items: center; margin: 10px 0 15px 0; padding: 8px;
+    background: linear-gradient(to bottom, var(--bg-light) 0%, var(--bg-lighter) 100%);
     border-radius: 4px;
 }
+.region-nav-info { color: var(--text-muted); font-size: 14px; font-weight: 500; }
 
-.region-nav-info {
-    color: #666;
-    font-size: 14px;
-    font-weight: 500;
+/* WaveSurfer Regions */
+.wavesurfer-region-label {
+    position: absolute; top: 2px; left: 4px; right: 4px; font-size: 11px;
+    background: rgba(255, 255, 255, 0.85); color: rgba(0, 0, 0, 0.8);
+    padding: 2px 4px; border-radius: 2px; white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis; pointer-events: none; z-index: 10;
+    line-height: 1.2; max-width: calc(100% - 16px); font-weight: 500;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+[data-theme="dark"] .wavesurfer-region-label {
+    background: rgba(0, 0, 0, 0.85);
+    color: rgba(255, 255, 255, 0.8);
+}
+.wavesurfer-region.editing-marker { box-shadow: 0 0 8px rgba(33, 150, 243, 0.5); z-index: 5 !important; }
+
+/* ==========================================================================
+    8. Theme Toggler Button (add to navbar.css or here)
+========================================================================== 
+*/
+
+.theme-toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5em;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 1em;
+}
+.theme-toggle-btn:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+[data-theme="dark"] .theme-toggle-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
-#prev-marker-btn, #next-marker-btn {
-    min-width: 140px;
-}
 
-/* Mobile adjustments */
+/* ==========================================================================
+    9. Responsive Adjustments (Original)
+========================================================================== 
+*/
+
+/* (Your existing @media queries are generally fine, no major changes needed for theming) */
+@media (max-width: 768px) {
+    body { padding: 10px; align-items: flex-start; }
+    .main-wrapper { padding: 20px; border-radius: 15px; max-height: none; min-height: 100vh; }
+    .subtitle-display { font-size: 16px; padding: 8px; bottom: 40px; }
+    .btn-group { justify-content: center; }
+    .subtitle-list { height: 150px; }
+    .main-timeline-container { height: 38px; }
+    .main-timeline-track { top: 15px; height: 20px; }
+    .main-timeline-selection { top: 15px; }
+    .main-timeline-playhead { top: 5px; height: 35px; }
+    .btn { padding-left: 8px; padding-right: 8px; font-size: 14px; }
+    .d-flex { width: 100%; }
+    .marker-actions { white-space: nowrap; flex-shrink: 0; }
+    .marker-actions .btn { padding: 4px 8px; font-size: 12px; }
+}
 @media (max-width: 576px) {
-    .region-navigation {
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-    
-    .region-nav-info {
-        width: 100%;
-        text-align: center;
-        margin: 0;
-    }
-    
-    #prev-marker-btn, #next-marker-btn {
-        flex: 1;
-        min-width: 120px;
-    }
+    .d-flex.gap-2 { justify-content: flex-start !important; }
+    #edit-active-marker { order: 5; }
+    #jump-to-in, #jump-to-out { order: 6; }
 }
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    body {
-        padding: 10px;
-        align-items: flex-start;
-    }
-    
-    .main-wrapper {
-        padding: 20px;
-        border-radius: 15px;
-        max-height: none;
-        min-height: 100vh;
-    }
-    
-    .subtitle-display {
-        font-size: 16px;
-        padding: 8px;
-        bottom: 40px;
-    }
-    
-    .btn-group {
-        justify-content: center;
-    }
-    
-    .subtitle-list {
-        height: 150px;
-    }
-    
-    .main-timeline-container {
-        height: 38px;
-    }
-    
-    .main-timeline-track {
-        top: 15px;
-        height: 20px;
-    }
-    
-    .main-timeline-selection {
-        top: 15px;
-    }
-    
-    .main-timeline-playhead {
-        top: 5px;
-        height: 35px;
-    }
-    
-    .btn {
-        padding-left: 8px;
-        padding-right: 8px;
-        font-size: 14px;
-    }
-    
-    .d-flex {
-        width: 100%;
-    }
-    
-    .marker-actions {
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
-    
-    .marker-actions .btn {
-        padding: 4px 8px;
-        font-size: 12px;
-    }
+@media (max-width: 480px) {
+    body { padding: 5px; }
+    .main-wrapper { padding: 15px; border-radius: 10px; }
+    .subtitle-display { font-size: 14px; padding: 5px; bottom: 50px; }
+    .d-flex { flex-direction: column; }
+    .d-flex.flex-wrap { flex-direction: row; }
+    .d-flex > * { width: 100%; margin-bottom: 5px; }
+    .search-navigation, .marker-actions, .time-info { flex-direction: row; width: 100%; }
+    .btn, .form-control { min-height: 44px; }
+    .frame-step { width: auto; min-width: 36px; }
+    .marker-header { flex-direction: column; align-items: flex-start; }
+    .marker-item { flex-direction: column; align-items: flex-start; }
+    .marker-actions { margin-top: 8px; width: 100%; justify-content: space-between; }
+    .btn-group { gap: 5px; }
+    .btn-group .btn { flex: 1 1 calc(50% - 5px); }
 }
-
-/* Jump to IN/OUT buttons styling */
-#jump-to-in, #jump-to-out {
-    font-weight: bold;
-    min-width: 45px;
-	max-width: 45px;
-    font-family: 'Courier New', monospace;
-}
-
-/* Keep buttons together */
-.btn-group #jump-to-in {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-right: none;
-}
-
-.btn-group #jump-to-out {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-}
-
-/* Ensure buttons stay together on mobile */
-@media (max-width: 768px) {
-    .btn-group {
-        flex-wrap: nowrap !important;
-        white-space: nowrap;
-    }
-    
-    #jump-to-in, #jump-to-out {
-        flex: 0 0 auto;
-    }
-}
+/* ==========================================================================
+    10. WaveSurfer & Timeline Marker Regions (Restored)
+========================================================================== 
+*/
 
 /* WaveSurfer Marker Regions Styling */
 .wavesurfer-region {
@@ -833,7 +531,7 @@ h5 {
 /* Region handles for resizing */
 .wavesurfer-handle {
     background-color: rgba(255, 255, 255, 0.8) !important;
-    border: 2px solid rgba(255, 0, 0, 0.6) !important;
+    border: 2px solid rgba(255, 255, 255, 0.6) !important;
     width: 8px !important;
     cursor: ew-resize !important;
 }
@@ -850,7 +548,7 @@ h5 {
     border-right: 2px solid rgba(255, 0, 0, 0.6);
 }
 
-/* Active/highlighted marker region */
+/* Active/highlighted marker region (when clicked in list) */
 .wavesurfer-region.wavesurfer-marker-active {
     background: rgba(255, 0, 0, 0.4) !important;
     border-left: 2px solid rgba(255, 0, 0, 0.8);
@@ -868,8 +566,8 @@ h5 {
 /* Context Menu Styling */
 .waveform-context-menu {
     position: absolute;
-    background: white;
-    border: 1px solid #ccc;
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     z-index: 1000;
@@ -877,42 +575,19 @@ h5 {
     padding: 5px 0;
     font-size: 14px;
 }
-
 .context-menu-item {
     padding: 8px 15px;
     cursor: pointer;
     transition: background-color 0.2s;
+    color: var(--text-color);
 }
-
 .context-menu-item:hover {
-    background-color: #f0f0f0;
+    background-color: var(--bg-hover);
 }
-
 .waveform-context-menu hr {
     margin: 5px 0;
     border: none;
-    border-top: 1px solid #e0e0e0;
-}
-
-/* Tooltip for marker regions */
-.wavesurfer-region::after {
-    content: attr(data-label);
-    position: absolute;
-    top: -20px;
-    left: 0;
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 11px;
-    white-space: nowrap;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.2s;
-}
-
-.wavesurfer-region:hover::after {
-    opacity: 1;
+    border-top: 1px solid var(--border-color);
 }
 
 /* Visual feedback when dragging/resizing */
@@ -921,49 +596,12 @@ h5 {
     cursor: grabbing !important;
 }
 
-/* Instructions overlay for waveform */
-#waveform-scroll-container::after {
-    position: absolute;
-    bottom: 5px;
-    right: 10px;
-    font-size: 11px;
-    color: #666;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 2px 6px;
-    border-radius: 3px;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    pointer-events: none;
-}
-
-#waveform-scroll-container:hover::after {
-    opacity: 1;
-}
-
 /* Ensure proper stacking order in waveform */
 .wavesurfer-region.wavesurfer-selection-region {
     z-index: 3 !important; /* Selection region on top */
 }
-
 .wavesurfer-region.wavesurfer-marker-region {
     z-index: 2 !important; /* Marker regions below selection */
-}
-
-/* Mobile adjustments */
-@media (max-width: 768px) {
-    .wavesurfer-handle {
-        width: 12px !important;
-        height: 100%;
-    }
-    
-    .waveform-context-menu {
-        font-size: 16px;
-        min-width: 180px;
-    }
-    
-    .context-menu-item {
-        padding: 12px 20px;
-    }
 }
 
 /* Timeline Marker Regions */
@@ -976,7 +614,7 @@ h5 {
     border-radius: 2px;
     pointer-events: all;
     cursor: pointer;
-    z-index: 1; /* Below selection (z-index: 2) but above track */
+    z-index: 1; /* Below selection but above track */
     transition: opacity 0.2s ease, background-color 0.2s ease;
 }
 
@@ -993,17 +631,6 @@ h5 {
     box-shadow: 0 0 4px rgba(255, 0, 0, 0.4);
 }
 
-/* Ensure the main selection stays on top and remains blue */
-.main-timeline-selection {
-    z-index: 2;
-    background: rgba(33, 150, 243, 0.3) !important; /* Blue selection */
-}
-
-/* Ensure playhead stays on top */
-.main-timeline-playhead {
-    z-index: 3;
-}
-
 /* Add a subtle animation when marker is loaded */
 @keyframes markerPulse {
     0% {
@@ -1016,259 +643,50 @@ h5 {
         box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
     }
 }
-
 .timeline-marker-region.pulse {
     animation: markerPulse 0.5s ease-out;
 }
 
-/* Mobile adjustments */
+/* Mobile adjustments for timeline markers */
 @media (max-width: 768px) {
     .timeline-marker-region {
         top: 14px;
         height: 22px;
     }
-}
-
-/* Small mobile devices */
-@media (max-width: 480px) {
-    body {
-        padding: 5px;
+    .wavesurfer-handle {
+        width: 12px !important;
     }
-    
-    .main-wrapper {
-        padding: 15px;
-        border-radius: 10px;
+    .waveform-context-menu {
+        font-size: 16px;
+        min-width: 180px;
     }
-    
-    .subtitle-display {
-        font-size: 14px;
-        padding: 5px;
-        bottom: 50px;
-    }
-    
-    .d-flex {
-        flex-direction: column;
-    }
-    
-    .d-flex.flex-wrap {
-        flex-direction: row;
-    }
-    
-    .d-flex > * {
-        width: 100%;
-        margin-bottom: 5px;
-    }
-    
-    .search-navigation,
-    .marker-actions,
-    .time-info {
-        flex-direction: row;
-        width: 100%;
-    }
-    
-    .btn, 
-    .form-control {
-        min-height: 44px;
-    }
-    
-    .frame-step {
-        width: auto;
-        min-width: 36px;
-    }
-
-    .marker-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .marker-item {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .marker-actions {
-        margin-top: 8px;
-        width: 100%;
-        justify-content: space-between;
-    }
-    
-    .btn-group {
-        gap: 5px;
-    }
-    
-    .btn-group .btn {
-        flex: 1 1 calc(50% - 5px);
-    }
-    
-    .marker-subtitle {
-        font-size: 0.85rem;
-        padding: 5px;
-    }
-    
-    .marker-edit-form textarea {
-        font-size: 0.85rem;
-    }
-    
-    .tick-label {
-        font-size: 7px;
-        padding: 0px 1px;
+    .context-menu-item {
+        padding: 12px 20px;
     }
 }
 
-/* Edit Active Marker Button */
-#edit-active-marker {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-
-#edit-active-marker:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-/* Responsive layout for marker buttons */
-@media (max-width: 576px) {
-    .d-flex.gap-2 {
-        justify-content: flex-start !important;
-    }
-    
-    #edit-active-marker {
-        order: 5;
-    }
-    
-    #jump-to-in, #jump-to-out {
-        order: 6;
-    }
-}
-
-/* Waveform Region Comment Labels */
-.wavesurfer-region-label {
-    position: absolute;
-    top: 2px;
-    left: 4px;
-    right: 4px;
-    font-size: 11px;
-    color: rgba(0, 0, 0, 0.8);
-    background: rgba(255, 255, 255, 0.85);
-    padding: 2px 4px;
-    border-radius: 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    pointer-events: none; /* Critical: allows clicks to pass through */
-    z-index: 10;
-    line-height: 1.2;
-    max-width: calc(100% - 16px); /* Account for resize handles */
-    font-weight: 500;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-/* Only hide label on very small regions (less than 50px wide) */
-.wavesurfer-region .wavesurfer-region-label {
-    display: block;
-}
-
-/* Hide label only when region width is explicitly very small */
-.wavesurfer-region[style*="width: 0px"] .wavesurfer-region-label,
-.wavesurfer-region[style*="width: 1px"] .wavesurfer-region-label,
-.wavesurfer-region[style*="width: 2px"] .wavesurfer-region-label,
-.wavesurfer-region[style*="width: 3px"] .wavesurfer-region-label,
-.wavesurfer-region[style*="width: 4px"] .wavesurfer-region-label {
-    display: none !important;
-}
-
-/* Show label only when region is wide enough (approximate) */
-.wavesurfer-region {
-    position: relative;
-}
-
-/* Hover effect for better readability */
-.wavesurfer-region:hover .wavesurfer-region-label {
-    background: rgba(255, 255, 255, 0.95);
-    color: rgba(0, 0, 0, 1);
-    z-index: 15;
-}
-
-/* Active marker has different label styling */
+/* Active marker has different label styling (CORRECTED) */
 .wavesurfer-region.wavesurfer-marker-active .wavesurfer-region-label {
-    background: rgba(255, 215, 0, 0.9);
-    color: #000;
+    background: rgba(0, 0, 0, 0.85); /* Red background */
+    color: #fff; /* White text */
     font-weight: 600;
 }
 
-/* Mobile adjustments */
-@media (max-width: 768px) {
-    .wavesurfer-region-label {
-        font-size: 10px;
-        padding: 1px 3px;
-        top: 1px;
-        left: 2px;
-        right: 2px;
-    }
-}
-
-/* Custom Duration Input Styling */
-/* Mobile-first stacked layout */
-.custom-duration-group .duration-row {
-  display: flex;
-}
-.custom-duration-group .duration-row input.form-control {
-  flex-grow: 1;
-  min-width: 50px; /* prevent input from getting too small */
-}
-.custom-duration-group .duration-separator {
-  display: flex;
-  justify-content: center;
-}
-.custom-duration-group > div {
-    margin-bottom: 5px; /* Add space between stacked rows */
-}
-
-/* Desktop horizontal layout */
-@media (min-width: 480px) {
-  .custom-duration-group {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    width: 100%;
-  }
-  .custom-duration-group > div {
-    margin-bottom: 0; /* Remove bottom margin for horizontal layout */
-  }
-  .custom-duration-group .duration-row {
-    flex-grow: 1;
-  }
-  .custom-duration-group .duration-separator {
-    flex-grow: 0;
-  }
-/* Editing marker visual feedback */
+/* Editing marker visual feedback (Blue) */
 .wavesurfer-region.editing-marker {
     cursor: grab !important;
     box-shadow: 0 0 8px rgba(33, 150, 243, 0.5);
     z-index: 5 !important;
 }
-
 .wavesurfer-region.editing-marker:active {
     cursor: grabbing !important;
 }
-
-/* Visual indicator in marker list for editing marker */
-.marker-item.editing {
-    background: linear-gradient(90deg, #e3f2fd 0%, #f8f9fa 100%);
-    border-left: 4px solid #2196F3;
-}
-
-/* Pulse animation for editing marker */
 @keyframes editPulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.7; }
 }
-
 .wavesurfer-region.editing-marker .wavesurfer-handle {
     animation: editPulse 1s infinite;
-    background-color: #2196F3 !important;
+    background-color: #2196F3 !important; /* Blue handles */
+    border-color: #fff !important;
 }
-	
-}
-
