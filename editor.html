@@ -13,6 +13,8 @@
     <!-- External CSS Libraries -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="navbar.css">
+    <script src="navbar.js" defer></script>	
     
     <!-- PWA Support (optional) -->
     <link rel="manifest" href="manifest.json">
@@ -22,234 +24,101 @@
     <link rel="preload" href="app.min.js" as="script">
     
     <style>
-        /* --- NAVBAR CSS --- */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap');
-
-        #navbar {
-          background-color: #FFFFFF;
-          border-bottom: 5px solid #00FF00;
-          font-family: Poppins, 'Segoe UI', sans-serif;
-          max-width: 1200px;
-          margin: 0 auto;
-          border-top-left-radius: 20px;
-          border-bottom-left-radius: 20px;
-            border-top-right-radius: 20px;
-          border-bottom-right-radius: 20px;
-        }
-        #navbar ul{
-          list-style: none;
-          display: flex;
-          margin-bottom: 0;
-          padding-left: 0;
-        }
-        #navbar .home-li{
-          margin-left: 10px;	
-          margin-right: auto;
-        }
-        #navbar li{
-          display: flex;
-        }
-        #navbar a{
-          display: flex;
-          text-decoration: none;
-          color: #000000;
-          padding: 0.2em 2em;
-          transition: background-color 150ms ease;
-        }
-        #navbar a:hover{
-          background-color: #00FF00;
-        }
-        #navbar a.active-link{
-          border-bottom: 3px solid #000000;
-        }
-        #navbar a.accent-link{
-          background-color: #FFDD00;
-          border-top-right-radius: 20px;
-          border-bottom-right-radius: 20px;
-        }
-        #open-sidebar-button{
-          display: none;
-          background: none;
-          border: none;
-          padding: 1em;
-          margin-left: auto;
-          cursor: pointer;
-        }
-        #close-sidebar-button{
-          display: none;
-          background: none;
-          border: none;
-          padding: 1em;
-          cursor: pointer;
-        }
-        #overlay{
-          background: rgba(0, 0, 0, 0.5);
-          position: fixed;
-          inset: 0;
-          z-index: 9;
-          display: none;
-        }
-        .skip-link {
-          opacity: 0;
-          pointer-events: none;
-          position: absolute;
-          top: 10px;
-          left: 10px;
-          z-index: 1000;
-          background-color: #FFDD00; 
-          color: #ffffff; 
-          padding: 12px 24px;
-          border-radius: 5px;
-          text-decoration: none;
-          font-weight: bold;
-          font-size: 1rem;
-          transition: opacity 0.3s ease;
-        }
-
-        .skip-link:focus {
-          opacity: 1; 
-          pointer-events: auto; 
-          outline: 3px solid #ffffff; 
-        }
-        @media screen and (max-width: 700px) {
-          #open-sidebar-button, #close-sidebar-button{
-            display: block;
-          }
-          #navbar{
-            position: fixed;
-            top: 0;
-            right: -100%;
-            height: 100vh;
-            width: min(15em, 100%);
-            z-index: 10;
-            border-left: 1px solid #00FF00;
-            transition: right 300ms ease-in-out;
-          }
-          #navbar.show{
-            right: 0;
-          }
-          #navbar.show ~ #overlay{
-            display: block;
-          }
-          #navbar ul{
-            width: 100%;
-            flex-direction: column;
-          }
-          #navbar a{
-            width: 100%;
-            padding-left: 2.5em;
-          }
-          #navbar a.active-link{
-            border-bottom: none;
-          }
-          #navbar .home-li{
-            margin-right: unset;
-          }
-        }
-
-        /* --- MAIN APP CSS (Dark Mode) --- */
-        /* CSS Variables for Dark Mode */
+        /* CSS Variables for Theme Support */
         :root {
             --primary-color: #4db8ff;
-            --primary-dark: #2196F3;
-            --secondary-color: #66bb6a;
-            --secondary-dark: #4CAF50;
-            --light-bg: #242424;
-            --lighter-bg: #333333;
-            --timeline-bg: #2a2a2a;
-            --border-radius: 4px;
-            --transition-speed: 0.2s;
-            --transcript-tab-bg: #1e1e1e;
+            --secondary-color: #1976D2;
+            --secondary-dark: #0d47a1;
+            --success-color: #4CAF50;
+            --danger-color: #ef5350;
+            --warning-color: #FF9800;
+            --info-color: #00BCD4;
             
-            /* Dark mode specific */
-            --body-bg: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-            --main-bg: #1a1a1a;
-            --text-color: #e8e8e8;
-            --text-muted: #999999;
-            --border-color: #404040;
-            --input-bg: #242424;
-            --hover-bg: #333333;
+            /* Light mode colors */
+            --main-bg: #ffffff;
+            --light-bg: #f5f5f5;
+            --timeline-bg: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
+            --hover-bg: #f0f0f0;
+            --border-color: #ccc;
+            --text-color: #333;
+            --text-muted: #666;
+            --input-bg: #ffffff;
+            --transcript-tab-bg: #f5f5f5;
+            
+            /* Marker colors */
+            --marker-red: rgba(220, 53, 69, 0.4);
+            --marker-red-border: rgba(220, 53, 69, 0.7);
+            --marker-blue: rgba(33, 150, 243, 0.5);
+            --marker-blue-border: rgba(33, 150, 243, 0.9);
+            
+            /* Common styles */
+            --border-radius: 8px;
+            --transition-speed: 0.2s;
         }
 
-        /* Base container and components */
+        /* Dark Mode Variables */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --main-bg: #1e1e1e;
+                --light-bg: #2a2a2a;
+                --timeline-bg: linear-gradient(to bottom, #3a3a3a, #2a2a2a);
+                --hover-bg: #3a3a3a;
+                --border-color: #444;
+                --text-color: #e0e0e0;
+                --text-muted: #999;
+                --input-bg: #2a2a2a;
+                --transcript-tab-bg: #2a2a2a;
+            }
+        }
+
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            background: var(--body-bg);
-            min-height: 100vh;
-            padding: 20px;
-            overflow-x: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--light-bg);
             margin: 0;
+            padding: 10px;
             color: var(--text-color);
         }
 
         .main-wrapper {
-            background: var(--main-bg);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            padding: 40px;
-            max-width: 1200px;
-            width: 100%;
-            margin: 20px auto;
-            border: 1px solid var(--border-color);
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: var(--main-bg);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .container {
-            width: 100%;
             max-width: 100%;
-            padding: 0;
-            margin: 0;
-        }
-
-        /* Theme Toggle Button (Hidden/Removed) */
-        .theme-toggle {
-            display: none;
-        }
-
-        /* Custom style for file input buttons */
-        .form-control::file-selector-button {
-            background-color: var(--light-bg);
-            border-color: var(--border-color);
-            color: var(--text-color);
-            transition: background-color 0.2s ease-in-out;
-        }
-
-        .form-control::file-selector-button:hover {
-            background-color: var(--hover-bg);
         }
 
         .video-container {
-            width: 100%;
+            background: var(--main-bg);
+            border-radius: var(--border-radius);
             padding: 0;
-            margin: 0 auto;
-            box-sizing: border-box;
         }
 
-        .video-controls, .marker-item { 
-            background: var(--light-bg); 
-            border-radius: var(--border-radius); 
-            padding: 10px; 
-            margin: 10px 0; 
+        /* Video player and subtitle overlay */
+        .video-wrapper {
+            position: relative;
             width: 100%;
-            border: 1px solid var(--border-color);
-        }
-
-        /* Video styling */
-        .video-wrapper { 
-            position: relative; 
-            margin-bottom: 15px; 
-            width: 100%;
+            background: black;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin-bottom: 20px;
         }
 
         #my_video {
             width: 100%;
-            background: #000;
-            border-radius: var(--border-radius);
+            height: auto;
             display: block;
-            border: 1px solid var(--border-color);
         }
 
-        /* Subtitle display styling */
         .subtitle-display {
             position: absolute;
             bottom: 50px;
@@ -257,16 +126,15 @@
             right: 0;
             text-align: center;
             color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-            font-size: 18px;
+            font-size: 16px;
             padding: 10px;
             background-color: rgba(0, 0, 0, 0.7);
             z-index: 10;
-            max-width: 90%;
+            max-width: 100%;
             margin: 0 auto;
             border-radius: 4px;
         }
-
+        
         /* Hide the timeline/seek bar on HTML5 video */
         video::-webkit-media-controls-timeline {
             display: none !important;
@@ -373,124 +241,115 @@
             margin: 0;
             color: var(--text-muted);
         }
-
-        /* Button styling - Dark Mode */
+		
+        /* Buttons */
         .btn {
-            white-space: nowrap;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            transition: all 0.2s ease;
-            background-color: var(--light-bg);
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-            background-color: var(--hover-bg);
-            border-color: var(--primary-color);
+            border-radius: var(--border-radius);
+            transition: all var(--transition-speed) ease;
+            font-weight: 500;
         }
 
         .btn-primary {
-            background-color: var(--primary-dark);
-            border-color: var(--primary-color);
-            color: white;
-        }
-
-        .btn-primary:hover {
             background-color: var(--primary-color);
-            box-shadow: 0 4px 12px rgba(77, 184, 255, 0.3);
+            border-color: var(--primary-color);
         }
 
         .btn-success {
-            background-color: var(--secondary-color);
-            border-color: var(--secondary-color);
-            color: white;
-        }
-
-        .btn-success:hover {
-            background-color: #81c784;
+            background-color: var(--success-color);
+            border-color: var(--success-color);
         }
 
         .btn-danger {
-            background-color: #ef5350;
-            border-color: #ef5350;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background-color: #f44336;
+            background-color: var(--danger-color);
+            border-color: var(--danger-color);
         }
 
         .btn-warning {
-            background-color: #ffa726;
-            border-color: #ffa726;
-            color: #000;
-        }
-
-        .btn-warning:hover {
-            background-color: #ffb74d;
+            background-color: var(--warning-color);
+            border-color: var(--warning-color);
         }
 
         .btn-info {
-            background-color: #42a5f5;
-            border-color: #42a5f5;
-            color: white;
+            background-color: var(--info-color);
+            border-color: var(--info-color);
         }
 
-        .btn-info:hover {
-            background-color: #64b5f6;
-        }
-
-        .btn-secondary, .btn-outline-secondary {
-            background-color: var(--light-bg);
+        .btn-outline-secondary {
+            color: var(--text-muted);
             border-color: var(--border-color);
+            background-color: transparent;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: var(--hover-bg);
             color: var(--text-color);
         }
 
-        .btn-secondary:hover, .btn-outline-secondary:hover {
-            background-color: var(--hover-bg);
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-        }
-
         .btn-outline-primary {
-            background-color: transparent;
-            border-color: var(--primary-color);
             color: var(--primary-color);
+            border-color: var(--primary-color);
+            background-color: transparent;
         }
 
         .btn-outline-primary:hover {
             background-color: var(--primary-color);
-            color: #000;
+            color: white;
         }
-
-        .btn-group {
+		
+		/* Region Navigation */
+        .region-navigation {
             display: flex;
-            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: var(--light-bg);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+        }
+
+        .region-nav-info {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Duration Input Group */
+        .custom-duration-group {
+            display: flex;
+            align-items: center;
             gap: 5px;
-            width: 100%;
+            flex-wrap: wrap;
         }
 
-        .btn-group .btn {
-            flex: 1 1 auto;
-            min-width: fit-content;
+        .duration-row {
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        .frame-step {
-            padding: 4px 6px;
-            font-size: 12px;
-            min-width: 40px;
+        .duration-separator {
+            display: flex;
+            align-items: center;
         }
 
-        /* Repeat button styling */
-        #repeat-play.active {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), 0 0 10px rgba(77, 184, 255, 0.3);
+        /* Scrollbar styling for dark mode */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-bg);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
         }
 
         /* Transcript styling */
@@ -729,6 +588,27 @@
         /* Ensure input text remains bright/visible when active or autofilled */
         .form-control:active, .form-control:focus-visible {
              color: var(--text-color);
+        }
+
+        /* Placeholder text styling - cross-browser support */
+        .form-control::placeholder {
+            color: #999;
+            opacity: 1;
+        }
+
+        .form-control::-webkit-input-placeholder {
+            color: #999;
+            opacity: 1;
+        }
+
+        .form-control::-moz-placeholder {
+            color: #999;
+            opacity: 1;
+        }
+
+        .form-control:-ms-input-placeholder {
+            color: #999;
+            opacity: 1;
         }
 
         /* Form labels for dark mode */
@@ -974,26 +854,12 @@
             animation: clickPulse 0.3s ease-out;
         }
 
-        /* Region Navigation Styling */
-        .region-navigation {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 10px 0 15px 0;
-            padding: 8px;
-            background: linear-gradient(to bottom, var(--light-bg) 0%, var(--hover-bg) 100%);
-            border-radius: 4px;
-            border: 1px solid var(--border-color);
-        }
-
-        .region-nav-info {
-            color: var(--text-muted);
-            font-size: 14px;
-            font-weight: 500;
-        }
-
         #prev-marker-btn, #next-marker-btn {
             min-width: 140px;
+        }
+
+        #delete-active-marker-btn {
+            min-width: 100px;
         }
 
         /* Check boxes and radio buttons for dark mode */
@@ -1036,6 +902,12 @@
             #prev-marker-btn, #next-marker-btn {
                 flex: 1;
                 min-width: 120px;
+            }
+            
+            #delete-active-marker-btn {
+                width: 100%;
+                margin-top: 5px;
+                margin-left: 0 !important;
             }
         }
 
@@ -1537,40 +1409,7 @@
                 right: 2px;
             }
         }
-
-        /* Custom Duration Input Styling */
-        .custom-duration-group .duration-row {
-          display: flex;
-        }
-        .custom-duration-group .duration-row input.form-control {
-          flex-grow: 1;
-          min-width: 50px;
-        }
-        .custom-duration-group .duration-separator {
-          display: flex;
-          justify-content: center;
-        }
-        .custom-duration-group > div {
-            margin-bottom: 5px;
-        }
-
-        /* Desktop horizontal layout */
-        @media (min-width: 480px) {
-          .custom-duration-group {
-            display: flex;
-            flex-wrap: nowrap;
-            align-items: center;
-            width: 100%;
-          }
-          .custom-duration-group > div {
-            margin-bottom: 0;
-          }
-          .custom-duration-group .duration-row {
-            flex-grow: 1;
-          }
-          .custom-duration-group .duration-separator {
-            flex-grow: 0;
-          }
+		
         /* Editing marker visual feedback */
         .wavesurfer-region.editing-marker {
             cursor: grab !important;
@@ -1617,6 +1456,32 @@
             transform: translateX(-50%);
             top: 0;
         }
+
+        /* Delete marker modal dark mode styling */
+        .modal-content {
+            background-color: var(--light-bg) !important;
+            border: 1px solid var(--border-color) !important;
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid var(--border-color) !important;
+        }
+        
+        .modal-footer {
+            border-top: 1px solid var(--border-color) !important;
+        }
+        
+        .modal-title {
+            color: var(--text-color) !important;
+        }
+        
+        .modal-body {
+            color: var(--text-color) !important;
+        }
+        
+        .btn-close-white {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
     </style>
 </head>
 <body>
@@ -1625,28 +1490,25 @@
     <button id="open-sidebar-button" aria-label="open sidebar" aria-expanded="false" aria-controls="navbar">
       <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#c9c9c9"><path d="M165.13-254.62q-10.68 0-17.9-7.26-7.23-7.26-7.23-18t7.23-17.86q7.22-7.13 17.9-7.13h629.74q10.68 0 17.9 7.26 7.23 7.26 7.23 18t-7.23 17.87q-7.22 7.12-17.9 7.12H165.13Zm0-200.25q-10.68 0-17.9-7.27-7.23-7.26-7.23-17.99 0-10.74 7.23-17.87 7.22-7.13 17.9-7.13h629.74q10.68 0 17.9 7.27 7.23 7.26 7.23 17.99 0 10.74-7.23 17.87-7.22 7.13-17.9 7.13H165.13Zm0-200.26q-10.68 0-17.9-7.26-7.23-7.26-7.23-18t7.23-17.87q7.22-7.12 17.9-7.12h629.74q10.68 0 17.9 7.26 7.23 7.26 7.23 18t-7.23 17.86q-7.22 7.13-17.9 7.13H165.13Z"/></svg>
     </button>
-  
-    <nav id="navbar">
-      <ul>
-        <li>
-          <button id="close-sidebar-button" aria-label="close sidebar">
-            <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#c9c9c9"><path d="m480-444.62-209.69 209.7q-7.23 7.23-17.5 7.42-10.27.19-17.89-7.42-7.61-7.61-7.61-17.7 0-10.07 7.61-17.69L444.62-480l-209.7-209.69q-7.23-7.23-7.42-17.5-.19-10.27 7.42-17.89 7.62-7.61 17.7-7.61 10.07 0 17.69 7.61L480-515.38l209.69-209.7q7.23-7.23 17.5-7.42 10.27-.19 17.89 7.42 7.61 7.62 7.61 17.7 0 10.07-7.61 17.69L515.38-480l209.7 209.69q7.23 7.23 7.42 17.5.19 10.27-7.42 17.89-7.62 7.61-17.7 7.61-10.07 0-17.69-7.61L480-444.62Z"/></svg>
-          </button>
-        </li>
-        <li class="home-li"><b><a href="index.html">HELP</a></b></li>
-        <li><b><a href="editor.html" class="active-link" aria-current="page">EDITOR</a></b></li>
-        <li><b><a href="export.html">EXPORT</a></b></li>
-        <li><b><a href="tools.html">TOOLS</a></b></li>
-        <li><a class="accent-link" href="https://buymeacoffee.com/ediuseditor">Buy me a coffee</a></li>
-      </ul>
-    </nav>
-    
-    <div id="overlay" aria-hidden="true"></div>
-    <main id="main-content">
-    <div class="main-wrapper">
-        <div class="container">
-            <div class="video-container">
-                <h2 class="my-3 text-center">Supercut and Marker Video Editor</h2>
+
+  <nav id="navbar">
+    <ul>
+      <li>
+        <button id="close-sidebar-button" onclick="closeSidebar()" aria-label="close sidebar">
+          <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#c9c9c9"><path d="m480-444.62-209.69 209.7q-7.23 7.23-17.5 7.42-10.27.19-17.89-7.42-7.61-7.62-7.61-17.7 0-10.07 7.61-17.69L444.62-480l-209.7-209.69q-7.23-7.23-7.42-17.5-.19-10.27 7.42-17.89 7.62-7.61 17.7-7.61 10.07 0 17.69 7.61L480-515.38l209.69-209.7q7.23-7.23 17.5-7.42 10.27-.19 17.89 7.42 7.61 7.62 7.61 17.7 0 10.07-7.61 17.69L515.38-480l209.7 209.69q7.23 7.23 7.42 17.5.19 10.27-7.42 17.89-7.62 7.61-17.7 7.61-10.07 0-17.69-7.61L480-444.62Z"/></svg>
+        </button>
+      </li>
+      <li class="home-li"><b><a href="index.html">HELP</a></b></li>
+      <li><b><a  class="active-link" aria-current="page" href="editor.html">EDITOR</a></b></li>
+      <li><b><a href="export.html">EXPORT</a></b></li>
+      <li><b><a href="tools.html">TOOLS</a></b></li>
+      <li><a class="accent-link" href="https://buymeacoffee.com/ediuseditor">Buy me a coffee</a></li>
+    </ul>
+  </nav>
+		<div class="main-wrapper">
+			<div class="container">
+				<div class="video-container">
+				<h2 class="text-center mb-4">Supercut and Marker Video Editor</h2>
                 
                 <!-- File upload zone -->
                 <div class="drop-zone" id="file-drop-zone">
@@ -1694,31 +1556,30 @@
                     <div class="subtitle-display" id="current-subtitle"></div>
                 </div>
 
-                <!-- Video controls -->
-                <div class="d-flex flex-wrap justify-content-between align-items-center my-2">
-                    <div class="d-flex align-items-center flex-grow-1">
-                        <div class="btn-group me-2">
-                            <button id="play-pause" class="btn btn-primary">Play</button>
-                            <!-- Repeat Button -->
-                            <button id="repeat-play" class="btn btn-secondary" title="Loop playback of selected range">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-repeat" viewBox="0 0 16 16">
-                                    <path d="M11 5.466V4H5a4 4 0 0 0-3.584 5.777.5.5 0 1 1-.896.446A5 5 0 0 1 5 3h6V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192Zm3.81 2.088a.5.5 0 0 1 .67.225A5 5 0 0 1 11 13H5v1.466a.25.25 0 0 1-.41.192l-2.36-1.966a.25.25 0 0 1 0-.384l2.36-1.966a.25.25 0 0 1 .41.192V12h6a4 4 0 0 0 3.585-5.777.5.5 0 0 1 .225-.67Z"/>
-                                </svg>
-                            </button>
-                            <button id="stop" class="btn btn-secondary">⏹︎</button>
-                        </div>
-                        <div class="btn-group me-2">
-                            <button id="frame-back" class="btn btn-outline-secondary frame-step">◀</button>
-                            <button id="frame-forward" class="btn btn-outline-secondary frame-step">▶</button>
-                        </div>
-                    </div>
-                    
-                    <div class="time-info ms-auto">
-                        <span>Current: <span id="current-time-value">00:00:00:00</span></span>
-                        <span>/</span>
-                        <span>Total: <span id="duration-time-value">00:00:00:00</span></span>
-                    </div>
-                </div>
+				<!-- Video controls -->
+				<div class="d-flex flex-wrap justify-content-between align-items-center my-2">
+					<div class="d-flex align-items-center flex-grow-1">
+						<div class="btn-group me-2">
+							<button id="play-pause" class="btn btn-primary">Play</button>
+							<button id="repeat-play" class="btn btn-secondary" title="Loop playback">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+									<path d="M11 5.466V4H5a4 4 0 0 0-3.584 5.777.5.5 0 1 1-.896.446A5 5 0 0 1 5 3h6V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192Zm3.81.088a.5.5 0 0 1 .67.225A5 5 0 0 1 11 13H5v1.466a.25.25 0 0 1-.41.192l-2.36-1.966a.25.25 0 0 1 0-.384l2.36-1.966a.25.25 0 0 1 .41.192V12h6a4 4 0 0 0 3.585-5.777.5.5 0 0 1 .225-.67Z"/>
+								</svg>
+							</button>
+							<button id="stop" class="btn btn-secondary">⏹︎</button>
+						</div>
+						<div class="btn-group me-2">
+							<button id="frame-back" class="btn btn-outline-secondary frame-step">◀</button>
+							<button id="frame-forward" class="btn btn-outline-secondary frame-step">▶</button>
+						</div>
+					</div>
+					
+					<div class="time-info ms-auto">
+						<span>Current: <span id="current-time-value">00:00:00:00</span></span>
+						<span>/</span>
+						<span>Total: <span id="duration-time-value">00:00:00:00</span></span>
+					</div>
+				</div>
 
                 <!-- Main Timeline -->
                 <div class="main-timeline-container" id="main-timeline">
@@ -1745,69 +1606,86 @@
 					<button id="next-marker-btn" class="btn btn-outline-secondary" title="Next Marker (Shift+W)">
 						Next ▶
 					</button>
+					<button id="edit-active-marker" class="btn btn-outline-secondary" title="Edit active marker" disabled>
+						✏️ Edit
+					</button>
+					<button id="delete-active-marker-btn" class="btn btn-outline-danger ms-3" title="Delete Active Marker (Del)">
+						🗑️ Delete
+					</button>
 				</div>
 				
-                <!-- Selection time display -->
-                <div class="time-info my-2 d-flex flex-wrap justify-content-center justify-content-md-start">
-                    <span id="selection-time" class="me-3">IN: 00:00:00:00 - OUT: 00:00:00:00</span>
-                    <span id="selection-duration">Duration: 00:00:00:00</span>
-                </div>					
-        
-                <!-- Markers control buttons -->
-				<div class="d-flex flex-wrap justify-content-center justify-content-md-start align-items-center my-3 gap-2">
-					<button id="set-in-point" class="btn btn-success" title="Set IN point at current position (I)">IN</button>
-					<button id="set-out-point" class="btn btn-danger" title="Set OUT point at current position (O)">OUT</button>
-					<button id="add-marker" class="btn btn-primary" title="Add Marker Range ([)">Add Marker Range</button>
-					<button id="reset-zoom" class="btn btn-warning" title="Reset IN/OUT to full duration (X)">Reset</button>
-					<!-- NEW EDIT MARKER BUTTON -->
-					<button id="edit-active-marker" class="btn btn-info" title="Edit active marker comment" disabled>
-						<span style="font-size: 1.1em;">&#9998;</span> Edit
-					</button>					
-					<!-- Jump to IN/OUT buttons grouped together -->
-					<button id="jump-to-in" class="btn btn-outline-primary" title="Jump to IN point (Q)">[←</button>
-					<button id="jump-to-out" class="btn btn-outline-primary" title="Jump to OUT point (W)">→]</button>
-				</div>				
+				<!-- Delete Confirmation Modal -->
+				<div class="modal fade" id="deleteMarkerModal" tabindex="-1" aria-labelledby="deleteMarkerModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="deleteMarkerModalLabel">Delete Marker?</h5>
+								<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								<p>Are you sure you want to delete the active marker region?</p>
+								<p class="text-muted small" id="delete-marker-info"></p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+								<button type="button" class="btn btn-danger" id="confirm-delete-marker-btn">Ok, delete region</button>
+							</div>
+						</div>
+					</div>
+				</div>
 				
-				<!-- Custom duration input -->
-                <h5 class="text-center my-3">Precise Range Duration</h5>
-                <div class="row g-3 mb-3 align-items-center">
-				<!-- Playhead position dropdown -->
-                    <div class="col-12 col-xl-4">
-                        <select id="playhead-position" class="form-select">
-                            <option value="in" selected>Set duration with In Point at Playhead</option>
-                            <option value="out">Set duration with Out Point at Playhead</option>
-                            <option value="mid">Set duration with Mid Point at Playhead</option>
-                        </select>
-                    </div>
-                    <div class="col-12 col-xl-5">
-                        <div class="custom-duration-group" id="custom-duration-input">
-                            <div class="duration-row">
-                                <input type="number" id="minutes-input" class="form-control" min="0" value="0" style="min-width:68px; max-width:70px;">
-                                <span class="input-group-text">mins</span>
-                            </div>
-                            <div class="duration-separator">
-                                <span class="input-group-text">:</span>
-                            </div>
-                            <div class="duration-row">
-                                <input type="number" id="seconds-input" class="form-control" min="0" max="59" value="0" style="min-width:60px; max-width:70px;">
-                                <span class="input-group-text">secs</span>
-                            </div>
-                            <div class="duration-separator">
-                                <span class="input-group-text">:</span>
-                            </div>
-                            <div class="duration-row">
-                                <input type="number" id="frames-input" class="form-control" min="0" value="0" style="min-width:60px; max-width:70px;">
-                                <span class="input-group-text">frames</span>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- NEW: SET Button for Precise Range -->
-                    <div class="col-12 col-xl-3">
-                        <button id="set-precise-range" class="btn btn-success w-100" title="Apply the precise range duration to IN/OUT points">
-                            SET
-                        </button>
-                    </div>
-                </div>
+				<!-- Selection time display -->
+				<div class="time-info my-2 d-flex flex-wrap justify-content-center justify-content-md-start">
+					<span id="selection-time" class="me-3">IN: 00:00:00:00 - OUT: 00:00:00:00</span>
+					<span id="selection-duration">Duration: 00:00:00:00</span>
+				</div>
+				
+				<!-- Markers control buttons -->
+				<div class="d-flex flex-wrap justify-content-center justify-content-md-start align-items-center my-3 gap-2">
+					<button id="set-in-point" class="btn btn-success" title="Set IN point (I)">IN</button>
+					<button id="set-out-point" class="btn btn-danger" title="Set OUT point (O)">OUT</button>
+					<button id="add-marker" class="btn btn-primary" title="Add Marker Range ([)">Add Marker</button>
+					<button id="reset-zoom" class="btn btn-warning" title="Reset IN/OUT (X)">Reset</button>
+					<button id="jump-to-in" class="btn btn-outline-primary" title="Jump to IN (Q)">[←</button>
+					<button id="jump-to-out" class="btn btn-outline-primary" title="Jump to OUT (W)">→]</button>
+				</div>
+				
+				<!-- Precise Range Duration -->
+				<h5 class="text-center my-3">Precise Range Duration</h5>
+				<div class="row g-3 mb-3 align-items-center">
+					<div class="col-12 col-xl-4">
+						<select id="playhead-position" class="form-select">
+							<option value="in" selected>Set duration with In Point at Playhead</option>
+							<option value="out">Set duration with Out Point at Playhead</option>
+							<option value="mid">Set duration with Mid Point at Playhead</option>
+						</select>
+					</div>
+					<div class="col-12 col-xl-5">
+						<div class="custom-duration-group" id="custom-duration-input">
+							<div class="duration-row">
+								<input type="number" id="minutes-input" class="form-control" min="0" value="0" style="min-width:68px; max-width:70px;">
+								<span class="input-group-text">mins</span>
+							</div>
+							<div class="duration-separator">
+								<span class="input-group-text">:</span>
+							</div>
+							<div class="duration-row">
+								<input type="number" id="seconds-input" class="form-control" min="0" max="59" value="0" style="min-width:60px; max-width:70px;">
+								<span class="input-group-text">secs</span>
+							</div>
+							<div class="duration-separator">
+								<span class="input-group-text">:</span>
+							</div>
+							<div class="duration-row">
+								<input type="number" id="frames-input" class="form-control" min="0" value="0" style="min-width:60px; max-width:70px;">
+								<span class="input-group-text">frames</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-xl-3">
+						<button id="set-precise-range" class="btn btn-success w-100" title="Apply precise range (])">SET</button>
+					</div>
+				</div>
 
                 <!-- Tabbed interface for markers and transcript -->
                 <ul class="nav nav-tabs" id="content-tabs" role="tablist">
