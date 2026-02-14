@@ -150,17 +150,32 @@ $(function() {
             values: [0, 100],
             step: 0.1,
             
-            create: function() {
-                $(this).find('.ui-slider-range').on('mousedown touchstart', function(e) {
-                    state.isDraggingRange = true;
-                    state.sliderDragStartedWithActiveMarker = state.activeMarkerIndex !== -1;
-                    const currentValues = dom.$timeSlider.slider('values');
-                    state.rangeWidth = currentValues[1] - currentValues[0];
-                    state.startOffset = e.pageX || e.originalEvent.touches[0].pageX;
-                    e.stopPropagation();
-                });
-            },
-            
+			create: function() {
+				const rangeElement = $(this).find('.ui-slider-range')[0];
+				
+				// Mouse: jQuery is fine
+				$(rangeElement).on('mousedown', function(e) {
+					state.isDraggingRange = true;
+					state.sliderDragStartedWithActiveMarker = state.activeMarkerIndex !== -1;
+					const currentValues = dom.$timeSlider.slider('values');
+					state.rangeWidth = currentValues[1] - currentValues[0];
+					state.startOffset = e.pageX;
+					e.stopPropagation();
+				});
+				
+				// Touch: native listener with passive: false
+				rangeElement.addEventListener('touchstart', function(e) {
+					e.preventDefault(); // Prevents scroll and copy-drag behavior
+					e.stopPropagation();
+					state.isDraggingRange = true;
+					state.sliderDragStartedWithActiveMarker = state.activeMarkerIndex !== -1;
+					const currentValues = dom.$timeSlider.slider('values');
+					state.rangeWidth = currentValues[1] - currentValues[0];
+					state.startOffset = e.touches[0].pageX;
+				}, { passive: false });
+			},
+			
+			            // ✅ THIS WAS MISSING — add it back here
             start: function(event, ui) {
                 state.isDraggingInHandle = ui.handleIndex === 0;
                 state.isDraggingOutHandle = ui.handleIndex === 1;
@@ -170,7 +185,7 @@ $(function() {
                     updateVideoFromSlider(ui.value);
                 }
             },
-            
+			
             slide: function(event, ui) {
                 if (!state.isDraggingRange) {
                     const duration = dom.video.duration || 0;
@@ -207,114 +222,123 @@ $(function() {
             },
             
             stop: function() {
-                // If we were editing a marker via slider, finalize changes
-                if (state.sliderDragStartedWithActiveMarker && state.activeMarkerIndex !== -1) {
-                    finalizeMarkerEdit();
-                }
-                
-                state.isDraggingInHandle = false;
-                state.isDraggingOutHandle = false;
-                state.sliderDragStartedWithActiveMarker = false;
+				// If we were editing a marker via slider, finalize changes
+				if (state.sliderDragStartedWithActiveMarker && state.activeMarkerIndex !== -1) {
+					finalizeMarkerEditKeepActive();
+				}
+				
+				// Delay clearing flags so the document click handler
+				// still sees them as true and skips deselection
+				setTimeout(() => {
+					state.isDraggingInHandle = false;
+					state.isDraggingOutHandle = false;
+					state.sliderDragStartedWithActiveMarker = false;
+				}, 0);
             }
         });
     }
     
-    // ============================================
-    // RANGE DRAGGING
-    // ============================================
-    function setupRangeDragging() {
-        $(document).on('mousemove touchmove', function(e) {
-            if (state.isDraggingRange) {
-                e.preventDefault();
-                
-                const clientX = e.pageX || e.originalEvent.touches[0].pageX;
-                const sliderWidth = dom.$timeSlider.width();
-                const delta = ((clientX - state.startOffset) / sliderWidth) * 100;
-                state.startOffset = clientX;
-                
-                let [currentStart, currentEnd] = dom.$timeSlider.slider('values');
-                let newStart = currentStart + delta;
-                let newEnd = newStart + state.rangeWidth;
-                
-                if (newStart < 0) {
-                    newStart = 0;
-                    newEnd = state.rangeWidth;
-                }
-                if (newEnd > 100) {
-                    newEnd = 100;
-                    newStart = 100 - state.rangeWidth;
-                }
-                
-                dom.$timeSlider.slider('values', [newStart, newEnd]);
-                
-                const duration = dom.video.duration || 0;
-                const zoomRange = state.zoomEnd - state.zoomStart;
-                const previousStart = state.currentSelection.start;
-                const previousEnd = state.currentSelection.end;
-                
-                state.currentSelection.start = (newStart / 100) * (duration * (zoomRange / 100)) + 
-                                        (duration * (state.zoomStart / 100));
-                state.currentSelection.end = (newEnd / 100) * (duration * (zoomRange / 100)) + 
-                                      (duration * (state.zoomStart / 100));
-                
-                updateTimelineSelection();
-                
-                // Update active marker in real-time if one is selected
-                if (state.activeMarkerIndex !== -1 && state.markers[state.activeMarkerIndex]) {
-                    const marker = state.markers[state.activeMarkerIndex];
-                    marker.start = state.currentSelection.start;
-                    marker.end = state.currentSelection.end;
-                    marker.duration = marker.end - marker.start;
-                    
-                    // Update marker region visual and list in real-time
-                    updateMarkerRegionVisual(state.activeMarkerIndex);
-                    updateMarkersListRealtime(state.activeMarkerIndex);
-                }
-                
-                const wasWithinSelection = (dom.video.currentTime >= previousStart && 
-                                           dom.video.currentTime <= previousEnd);
-                
-                if (!wasWithinSelection) {
-                    dom.video.currentTime = state.currentSelection.start;
-                } else {
-                    const relativePosition = (dom.video.currentTime - previousStart) / 
-                                            (previousEnd - previousStart);
-                    dom.video.currentTime = state.currentSelection.start + 
-                                       (relativePosition * (state.currentSelection.end - state.currentSelection.start));
-                }
-                
-                updateTimeDisplays();
-            }
-        });
-        
-        $(document).on('mouseup touchend', function() {
-            // If we were editing a marker via range drag, finalize changes
-            if (state.isDraggingRange && state.sliderDragStartedWithActiveMarker && state.activeMarkerIndex !== -1) {
-                finalizeMarkerEdit();
-            }
-            state.isDraggingRange = false;
-            state.sliderDragStartedWithActiveMarker = false;
-        });
-    }
-    
-    // Finalize marker edit - sort and deselect
-    function finalizeMarkerEdit() {
-        if (state.activeMarkerIndex === -1) return;
-        
-        // Store reference to the active marker before sorting
-        const activeMarker = state.markers[state.activeMarkerIndex];
-        
-        // Sort markers by start time
-        state.markers.sort((a, b) => a.start - b.start);
-        
-        // Deselect marker (revert to red)
-        state.activeMarkerIndex = -1;
-        
-        // Update everything
-        updateEditMarkerButtonState();
-        updateMarkersList();
-        renderTimelineMarkers();
-    }
+	// ============================================
+	// RANGE DRAGGING (Fixed for touch + passive events)
+	// ============================================
+	function setupRangeDragging() {
+		
+		// --- Mouse move: jQuery is fine for mouse events (no passive issue) ---
+		$(document).on('mousemove', function(e) {
+			if (!state.isDraggingRange) return;
+			handleRangeDragMove(e.pageX);
+		});
+		
+		// --- Touch move: MUST use native listener with { passive: false } ---
+		document.addEventListener('touchmove', function(e) {
+			if (!state.isDraggingRange) return;
+			e.preventDefault(); // Now actually works because passive: false
+			const touch = e.touches[0];
+			handleRangeDragMove(touch.pageX);
+		}, { passive: false });
+		
+		// --- Mouse up ---
+		$(document).on('mouseup', function() {
+			handleRangeDragEnd();
+		});
+		
+		// --- Touch end ---
+		document.addEventListener('touchend', function() {
+			handleRangeDragEnd();
+		});
+		
+		// Shared drag move logic (called by both mouse and touch)
+		function handleRangeDragMove(clientX) {
+			const sliderWidth = dom.$timeSlider.width();
+			const delta = ((clientX - state.startOffset) / sliderWidth) * 100;
+			state.startOffset = clientX;
+			
+			let [currentStart, currentEnd] = dom.$timeSlider.slider('values');
+			let newStart = currentStart + delta;
+			let newEnd = newStart + state.rangeWidth;
+			
+			if (newStart < 0) {
+				newStart = 0;
+				newEnd = state.rangeWidth;
+			}
+			if (newEnd > 100) {
+				newEnd = 100;
+				newStart = 100 - state.rangeWidth;
+			}
+			
+			dom.$timeSlider.slider('values', [newStart, newEnd]);
+			
+			const duration = dom.video.duration || 0;
+			const zoomRange = state.zoomEnd - state.zoomStart;
+			const previousStart = state.currentSelection.start;
+			const previousEnd = state.currentSelection.end;
+			
+			state.currentSelection.start = (newStart / 100) * (duration * (zoomRange / 100)) + 
+									(duration * (state.zoomStart / 100));
+			state.currentSelection.end = (newEnd / 100) * (duration * (zoomRange / 100)) + 
+								  (duration * (state.zoomStart / 100));
+			
+			updateTimelineSelection();
+			
+			// Update active marker in real-time if one is selected
+			if (state.activeMarkerIndex !== -1 && state.markers[state.activeMarkerIndex]) {
+				const marker = state.markers[state.activeMarkerIndex];
+				marker.start = state.currentSelection.start;
+				marker.end = state.currentSelection.end;
+				marker.duration = marker.end - marker.start;
+				
+				updateMarkerRegionVisual(state.activeMarkerIndex);
+				updateMarkersListRealtime(state.activeMarkerIndex);
+			}
+			
+			const wasWithinSelection = (dom.video.currentTime >= previousStart && 
+									   dom.video.currentTime <= previousEnd);
+			
+			if (!wasWithinSelection) {
+				dom.video.currentTime = state.currentSelection.start;
+			} else {
+				const relativePosition = (dom.video.currentTime - previousStart) / 
+										(previousEnd - previousStart);
+				dom.video.currentTime = state.currentSelection.start + 
+								   (relativePosition * (state.currentSelection.end - state.currentSelection.start));
+			}
+			
+			updateTimeDisplays();
+		}
+		
+		// Shared drag end logic (called by both mouse and touch)
+		function handleRangeDragEnd() {
+			if (state.isDraggingRange && state.sliderDragStartedWithActiveMarker && state.activeMarkerIndex !== -1) {
+				finalizeMarkerEditKeepActive();
+			}
+			// Delay clearing flags so document click handler
+			// still sees them as true and skips deselection
+			setTimeout(() => {
+				state.isDraggingRange = false;
+				state.sliderDragStartedWithActiveMarker = false;
+			}, 0);
+		}
+	}
     
     // ============================================
     // MARKER MANAGEMENT
@@ -867,7 +891,7 @@ $(function() {
         state.isMarkerResizingRight = false;
         
         // Finalize marker edit (sort and deselect)
-        finalizeMarkerEdit();
+        finalizeMarkerEditKeepActive();
     }
 
     // ============================================
@@ -2439,6 +2463,7 @@ $(function() {
         state.video = dom.video;
         
         initializeSlider();
+		enableSliderTouch();
         setupRangeDragging();
         setupEventHandlers();
         setupDragAndDrop();
@@ -2447,6 +2472,58 @@ $(function() {
         updatePathDropdown();
         updateFramesInputMax();
     }
+	// ============================================
+	// TOUCH SUPPORT FOR JQUERY UI SLIDER HANDLES
+	// Translates touch events into mouse events so
+	// jQuery UI's slider handles work on mobile
+	// ============================================
+	function enableSliderTouch() {
+		const slider = dom.$timeSlider[0];
+		
+		slider.addEventListener('touchstart', function(e) {
+			// Only intercept touches on the slider handles
+			const target = e.target;
+			if (!target.classList.contains('ui-slider-handle')) return;
+			
+			e.preventDefault();
+			const touch = e.touches[0];
+			
+			// Create and dispatch a synthetic mousedown at the touch position
+			const mouseDown = new MouseEvent('mousedown', {
+				bubbles: true,
+				cancelable: true,
+				clientX: touch.clientX,
+				clientY: touch.clientY
+			});
+			target.dispatchEvent(mouseDown);
+		}, { passive: false });
+		
+		document.addEventListener('touchmove', function(e) {
+			// Only intercept if we're dragging a slider handle
+			if (!state.isDraggingInHandle && !state.isDraggingOutHandle) return;
+			
+			e.preventDefault();
+			const touch = e.touches[0];
+			
+			const mouseMove = new MouseEvent('mousemove', {
+				bubbles: true,
+				cancelable: true,
+				clientX: touch.clientX,
+				clientY: touch.clientY
+			});
+			document.dispatchEvent(mouseMove);
+		}, { passive: false });
+		
+		document.addEventListener('touchend', function(e) {
+			if (!state.isDraggingInHandle && !state.isDraggingOutHandle) return;
+			
+			const mouseUp = new MouseEvent('mouseup', {
+				bubbles: true,
+				cancelable: true
+			});
+			document.dispatchEvent(mouseUp);
+		});
+	}
     
     // Start the application
     init();
