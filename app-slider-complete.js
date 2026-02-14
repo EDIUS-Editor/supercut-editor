@@ -38,6 +38,10 @@ $(function() {
         markerDragStartX: 0,
         sliderDragStartedWithActiveMarker: false,
         
+        // Guard: timestamp of last drag/slider end to prevent
+        // the document-click handler from immediately deselecting
+        lastDragEndTime: 0,
+        
         // Playback state
         isRepeating: false,
         
@@ -175,7 +179,6 @@ $(function() {
 				}, { passive: false });
 			},
 			
-			            // ✅ THIS WAS MISSING — add it back here
             start: function(event, ui) {
                 state.isDraggingInHandle = ui.handleIndex === 0;
                 state.isDraggingOutHandle = ui.handleIndex === 1;
@@ -226,6 +229,10 @@ $(function() {
 				if (state.sliderDragStartedWithActiveMarker && state.activeMarkerIndex !== -1) {
 					finalizeMarkerEditKeepActive();
 				}
+				
+				// Record timestamp so the document click handler
+				// won't immediately deselect the marker
+				state.lastDragEndTime = Date.now();
 				
 				// Delay clearing flags so the document click handler
 				// still sees them as true and skips deselection
@@ -328,9 +335,16 @@ $(function() {
 		
 		// Shared drag end logic (called by both mouse and touch)
 		function handleRangeDragEnd() {
-			if (state.isDraggingRange && state.sliderDragStartedWithActiveMarker && state.activeMarkerIndex !== -1) {
+			if (!state.isDraggingRange) return;
+			
+			if (state.sliderDragStartedWithActiveMarker && state.activeMarkerIndex !== -1) {
 				finalizeMarkerEditKeepActive();
 			}
+			
+			// Record timestamp so the document click handler
+			// won't immediately deselect the marker
+			state.lastDragEndTime = Date.now();
+			
 			// Delay clearing flags so document click handler
 			// still sees them as true and skips deselection
 			setTimeout(() => {
@@ -398,6 +412,32 @@ $(function() {
         
         updateMarkersList();
         renderTimelineMarkers();
+    }
+    
+    // ============================================
+    // FIX: finalizeMarkerEditKeepActive
+    // Called after slider/drag edits to sort markers
+    // while keeping the active marker selected.
+    // ============================================
+    function finalizeMarkerEditKeepActive() {
+        if (state.activeMarkerIndex === -1) return;
+        
+        const activeMarker = state.markers[state.activeMarkerIndex];
+        if (!activeMarker) return;
+        
+        // Sort markers (preserves activeMarkerIndex by object reference)
+        state.markers.sort((a, b) => a.start - b.start);
+        
+        // Find the new index of the active marker after sorting
+        const newIndex = state.markers.indexOf(activeMarker);
+        if (newIndex !== -1) {
+            state.activeMarkerIndex = newIndex;
+        }
+        
+        // Update visuals — marker stays active
+        updateMarkersList();
+        renderTimelineMarkers();
+        updateEditMarkerButtonState();
     }
     
     function loadMarker(index) {
@@ -573,8 +613,9 @@ $(function() {
             div.className = 'marker-item';
             div.setAttribute('data-index', originalIndex);
             
+            // FIX: Use 'active' class to match CSS (.marker-item.active)
             if (originalIndex === state.activeMarkerIndex) {
-                div.classList.add('editing');
+                div.classList.add('active');
             }
             
             const commentObj = marker.comments && marker.comments.length > 0 ? marker.comments[0] : null;
@@ -641,7 +682,7 @@ $(function() {
             markerRegion.style.width = `${widthPercent}%`;
             
             if (index === state.activeMarkerIndex) {
-                markerRegion.classList.add('editing');
+                markerRegion.classList.add('active');
             }
             
             // Add resize handles
@@ -890,8 +931,11 @@ $(function() {
         state.isMarkerResizingLeft = false;
         state.isMarkerResizingRight = false;
         
-        // Finalize marker edit (sort and deselect)
+        // Finalize marker edit (sort but keep active)
         finalizeMarkerEditKeepActive();
+        
+        // Record timestamp to prevent document click from deselecting
+        state.lastDragEndTime = Date.now();
     }
 
     // ============================================
@@ -2428,6 +2472,7 @@ $(function() {
         $(document).on('touchend', handleMarkerDragEnd);
         
         // Document-level click to deselect markers when clicking outside
+        // FIX: Added timestamp guard to prevent deselection right after drag/slider ends
         $(document).on('click', function(e) {
             // Don't deselect if clicking on marker-related elements
             if ($(e.target).closest('.timeline-marker-region, .marker-item, #time-slider, .ui-slider-handle, .ui-slider-range').length > 0) {
@@ -2444,8 +2489,14 @@ $(function() {
                 return;
             }
             
-            // Don't deselect if slider was just used
+            // Don't deselect if slider was just used (flags still set from setTimeout)
             if (state.isDraggingRange || state.isDraggingInHandle || state.isDraggingOutHandle) {
+                return;
+            }
+            
+            // FIX: Don't deselect if a drag/slider operation just ended (within 200ms)
+            // This catches edge cases where setTimeout(0) clears flags before the click fires
+            if (Date.now() - state.lastDragEndTime < 200) {
                 return;
             }
             
