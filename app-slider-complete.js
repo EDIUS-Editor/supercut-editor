@@ -96,6 +96,7 @@ $(function() {
         editActiveMarkerBtn: document.getElementById('edit-active-marker'),
         prevMarkerBtn: document.getElementById('prev-marker-btn'),
         nextMarkerBtn: document.getElementById('next-marker-btn'),
+        deleteActiveMarkerBtn: document.getElementById('delete-active-marker'),	
         markersList: document.getElementById('markers-list'),
         markerSearchInput: document.getElementById('marker-search'),
         markerSearchClearBtn: document.getElementById('marker-search-clear-btn'),
@@ -138,6 +139,11 @@ $(function() {
         customPathInput: document.getElementById('custom-path'),
         savePathBtn: document.getElementById('save-path'),
         savedPathsSelect: document.getElementById('saved-paths'),
+		
+        // Modal
+        deleteMarkerModal: new bootstrap.Modal(document.getElementById('deleteMarkerModal')),
+        confirmDeleteBtn: document.getElementById('confirm-delete-btn'),
+        deleteMarkerInfo: document.getElementById('delete-marker-info'),		
         
         // Other
         dropZone: document.getElementById('file-drop-zone')
@@ -478,6 +484,25 @@ $(function() {
         updateEditMarkerButtonState();
         sortMarkers();
     }
+	
+    function showDeleteConfirmation() {
+        if (state.activeMarkerIndex === -1 || !state.markers[state.activeMarkerIndex]) return;
+
+        const marker = state.markers[state.activeMarkerIndex];
+        const commentObj = marker.comments && marker.comments.length > 0 ? marker.comments[0] : null;
+        const displayText = commentObj ? commentObj.text : "No comment";
+        const markerNumber = state.activeMarkerIndex + 1;
+
+        // Populate modal info
+        dom.deleteMarkerInfo.innerHTML = `
+            <strong>Marker ${markerNumber}</strong><br>
+            Time: ${toSMPTE(marker.start)} - ${toSMPTE(marker.end)}<br>
+            Duration: ${toSMPTE(marker.duration)}<br>
+            <span class="text-muted small">${displayText.substring(0, 50)}${displayText.length > 50 ? '...' : ''}</span>
+        `;
+
+        dom.deleteMarkerModal.show();
+    }	
     
     function editMarkerText(index, markerElement) {
         const marker = state.markers[index];
@@ -1620,7 +1645,7 @@ $(function() {
         
         if (withPadding) {
             const range = end - start;
-            const padding = range * 0.1;
+            const padding = range * 0.2;
             start = Math.max(0, start - padding);
             end = Math.min(100, end + padding);
         }
@@ -1706,12 +1731,11 @@ $(function() {
     }
     
     function updateEditMarkerButtonState() {
-        if (!dom.editActiveMarkerBtn) return;
-        
         const hasActiveMarker = state.activeMarkerIndex !== -1 && 
                                 state.markers[state.activeMarkerIndex];
         
-        dom.editActiveMarkerBtn.disabled = !hasActiveMarker;
+        if (dom.editActiveMarkerBtn) dom.editActiveMarkerBtn.disabled = !hasActiveMarker;
+        if (dom.deleteActiveMarkerBtn) dom.deleteActiveMarkerBtn.disabled = !hasActiveMarker;
     }
     
     function timeToSeconds(timeString) {
@@ -2353,6 +2377,16 @@ $(function() {
                 }
             }
         });
+		
+        // Delete Marker Buttons
+        $('#delete-active-marker').on('click', showDeleteConfirmation);
+        
+        $('#confirm-delete-btn').on('click', () => {
+            if (state.activeMarkerIndex !== -1) {
+                removeMarker(state.activeMarkerIndex);
+                dom.deleteMarkerModal.hide();
+            }
+        });		
         
         // Navigation buttons
         $('#prev-marker-btn').on('click', jumpToPreviousMarker);
@@ -2480,7 +2514,7 @@ $(function() {
             }
             
             // Don't deselect if clicking on marker control buttons
-            if ($(e.target).closest('#add-marker, #edit-active-marker, #prev-marker-btn, #next-marker-btn').length > 0) {
+            if ($(e.target).closest('#add-marker, #edit-active-marker, #delete-active-marker, #prev-marker-btn, #next-marker-btn').length > 0) {
                 return;
             }
             
