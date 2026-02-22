@@ -170,20 +170,42 @@
             pointer-events: none;
         }
 
+        /* ============================================
+           DRAGGABLE PLAYHEAD — interactive, not passive
+           ============================================ */
         .main-timeline-playhead {
             position: absolute;
             top: 5px;
-            width: 3px;
+            /* Visible line is 3px, but pad to 17px for easy grab */
+            width: 17px;
+            margin-left: -8px;          /* centre the wider box on the % position */
             height: 40px;
-            background: var(--primary-color);
-            transform: translateX(-50%);
-            cursor: ew-resize;
-            z-index: 3;
-            pointer-events: none;
+            background: transparent;     /* transparent box = larger hit area */
+            transform: none;             /* no translateX — margin handles centring */
+            cursor: grab;
+            z-index: 5;
+            /* pointer-events ENABLED so it can be dragged */
+            pointer-events: auto;
             border-radius: 2px;
-            box-shadow: 0 0 10px rgba(77, 184, 255, 0.6);
+            /* No box-shadow on the hit-area wrapper */
         }
 
+        /* The visible 3px line is drawn with ::after */
+        .main-timeline-playhead::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(77, 184, 255, 0.6);
+            pointer-events: none;        /* clicks pass through to the parent */
+        }
+
+        /* The triangle cap */
         .main-timeline-playhead::before {
             content: '';
             position: absolute;
@@ -195,6 +217,31 @@
             border-left: 8px solid transparent;
             border-right: 8px solid transparent;
             border-top: 8px solid var(--primary-color);
+            pointer-events: none;
+        }
+
+        /* While actively dragging */
+        .main-timeline-playhead.dragging {
+            cursor: grabbing;
+        }
+
+        .main-timeline-playhead.dragging::after {
+            background: #80d4ff;
+            box-shadow: 0 0 14px rgba(77, 184, 255, 0.9);
+        }
+
+        .main-timeline-playhead.dragging::before {
+            border-top-color: #80d4ff;
+        }
+
+        /* Hover feedback */
+        .main-timeline-playhead:hover::after {
+            background: #80d4ff;
+            box-shadow: 0 0 12px rgba(77, 184, 255, 0.7);
+        }
+
+        .main-timeline-playhead:hover::before {
+            border-top-color: #80d4ff;
         }
 
         /* Time info displays */
@@ -645,11 +692,6 @@
             background: rgba(77, 184, 255, 0.4) !important;
         }
 
-        /* Ensure playhead stays on top */
-        .main-timeline-playhead {
-            z-index: 3;
-        }
-
         /* Add a subtle animation when marker is loaded */
         @keyframes markerPulse {
             0% {
@@ -827,6 +869,53 @@
             border: 2px solid var(--primary-color);
         }
 
+        /* IN handle (first) = green, OUT handle (second) = red */
+        .ui-slider .ui-slider-handle:first-of-type {
+            border-color: var(--success-color);
+            background: var(--main-bg);
+        }
+
+        .ui-slider .ui-slider-handle:last-of-type {
+            border-color: var(--danger-color);
+            background: var(--main-bg);
+        }
+
+        .ui-slider .ui-slider-handle:first-of-type:hover,
+        .ui-slider .ui-slider-handle:first-of-type:focus {
+            border-color: var(--success-color);
+            box-shadow: 0 0 6px rgba(76, 175, 80, 0.5);
+        }
+
+        .ui-slider .ui-slider-handle:last-of-type:hover,
+        .ui-slider .ui-slider-handle:last-of-type:focus {
+            border-color: var(--danger-color);
+            box-shadow: 0 0 6px rgba(239, 83, 80, 0.5);
+        }
+
+        /* Jump-to-in green outline */
+        .btn-outline-success {
+            color: var(--success-color);
+            border-color: var(--success-color);
+            background-color: transparent;
+        }
+
+        .btn-outline-success:hover {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        /* Jump-to-out red outline */
+        .btn-outline-danger {
+            color: var(--danger-color);
+            border-color: var(--danger-color);
+            background-color: transparent;
+        }
+
+        .btn-outline-danger:hover {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
         /* Buttons */
         .btn {
             border-radius: var(--border-radius);
@@ -917,6 +1006,77 @@
             align-items: center;
         }
 
+        /* Subtitle toggle button */
+        #toggle-subtitles {
+            font-size: 12px;
+            padding: 2px 8px;
+            line-height: 1.4;
+        }
+
+        #toggle-subtitles.active {
+            background-color: var(--danger-color);
+            border-color: var(--danger-color);
+            color: white;
+        }
+
+        .subtitle-display.hidden {
+            display: none !important;
+        }
+
+        /* Play Regions button */
+        #play-regions.active {
+            background-color: var(--danger-color);
+            border-color: var(--danger-color);
+            color: white;
+        }
+
+        /* Marker search actions bar */
+        .marker-search-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 8px;
+            padding: 8px 10px;
+            background-color: var(--light-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+        }
+
+        .marker-match-counter {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .marker-search-buttons {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .marker-search-buttons .btn {
+            font-size: 12px;
+            padding: 3px 10px;
+        }
+
+        @media (max-width: 480px) {
+            .marker-search-actions {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 6px;
+            }
+
+            .marker-match-counter {
+                text-align: center;
+            }
+
+            .marker-search-buttons {
+                justify-content: center;
+            }
+        }
+
         /* Scrollbar styling for dark mode */
         ::-webkit-scrollbar {
             width: 10px;
@@ -980,6 +1140,9 @@
                         <option value="60">60</option>
                     </select>
                 </div>
+                <button id="toggle-subtitles" class="btn btn-sm btn-outline-secondary ms-2" title="Toggle subtitle overlay on/off">
+                    <s>SUB</s>
+                </button>
             </div>
             
             <div class="video-wrapper">
@@ -1042,8 +1205,9 @@
                 <button id="set-out-point" class="btn btn-danger" title="Set OUT point (O)">OUT</button>
                 <button id="add-marker" class="btn btn-primary" title="Add Marker Range ([)">Add Marker</button>
                 <button id="reset-zoom" class="btn btn-warning" title="Reset IN/OUT (X)">Reset</button>
-                <button id="jump-to-in" class="btn btn-outline-primary" title="Jump to IN (Q)">[←</button>
-                <button id="jump-to-out" class="btn btn-outline-primary" title="Jump to OUT (W)">→]</button>
+                <button id="jump-to-in" class="btn btn-outline-success" title="Jump to IN (Q)">[←</button>
+                <button id="jump-to-out" class="btn btn-outline-danger" title="Jump to OUT (W)">→]</button>
+                <button id="play-regions" class="btn btn-outline-secondary" title="Play all marker regions sequentially">▶ Regions</button>
             </div>
             
             <h5 class="text-center my-3">Precise Range Duration</h5>
@@ -1114,6 +1278,13 @@
                             <input type="text" id="marker-search" class="form-control" placeholder="Search marker comments...">
                             <button class="search-clear-btn" id="marker-search-clear-btn" title="Clear search">×</button>
                         </div>
+                        <div class="marker-search-actions" id="marker-search-actions" style="display: none;">
+                            <span class="marker-match-counter" id="marker-match-counter"></span>
+                            <div class="marker-search-buttons">
+                                <button id="keep-only-matches" class="btn btn-sm btn-outline-success" disabled>Keep Only Matches</button>
+                                <button id="delete-matches" class="btn btn-sm btn-outline-danger" disabled>Delete Matches</button>
+                            </div>
+                        </div>
                     </div>
                     
                     <div id="markers-list" class="mt-3"></div>
@@ -1172,6 +1343,25 @@
           <div class="modal-footer" style="border-top: 1px solid var(--border-color);">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
             <button type="button" class="btn btn-danger" id="confirm-delete-btn">Ok, delete region</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="bulkDeleteMarkerModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background-color: var(--main-bg); color: var(--text-color); border: 1px solid var(--border-color);">
+          <div class="modal-header" style="border-bottom: 1px solid var(--border-color);">
+            <h5 class="modal-title" id="bulk-delete-title">Delete Markers?</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+          </div>
+          <div class="modal-body">
+            <div id="bulk-delete-info" class="p-2 mb-3" style="background: var(--light-bg); border-radius: 4px; border-left: 3px solid var(--danger-color);"></div>
+            <p class="text-danger small mb-0"><strong>⚠ This action cannot be undone.</strong></p>
+          </div>
+          <div class="modal-footer" style="border-top: 1px solid var(--border-color);">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger" id="confirm-bulk-delete-btn">Confirm Delete</button>
           </div>
         </div>
       </div>
