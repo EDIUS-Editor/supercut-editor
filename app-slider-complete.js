@@ -44,6 +44,11 @@ $(function() {
         
         // Playback state
         isRepeating: false,
+        isPlayingRegions: false,
+        playingRegionIndex: -1,
+        
+        // Bulk delete state
+        pendingBulkDeleteMode: null, // 'keep' or 'delete'
         
         // Subtitle state
         subtitles: [],
@@ -143,7 +148,19 @@ $(function() {
         // Modal
         deleteMarkerModal: new bootstrap.Modal(document.getElementById('deleteMarkerModal')),
         confirmDeleteBtn: document.getElementById('confirm-delete-btn'),
-        deleteMarkerInfo: document.getElementById('delete-marker-info'),		
+        deleteMarkerInfo: document.getElementById('delete-marker-info'),
+        
+        // Bulk delete modal
+        bulkDeleteMarkerModal: new bootstrap.Modal(document.getElementById('bulkDeleteMarkerModal')),
+        bulkDeleteTitle: document.getElementById('bulk-delete-title'),
+        bulkDeleteInfo: document.getElementById('bulk-delete-info'),
+        confirmBulkDeleteBtn: document.getElementById('confirm-bulk-delete-btn'),
+        
+        // Marker search actions
+        markerSearchActions: document.getElementById('marker-search-actions'),
+        markerMatchCounter: document.getElementById('marker-match-counter'),
+        keepOnlyMatchesBtn: document.getElementById('keep-only-matches'),
+        deleteMatchesBtn: document.getElementById('delete-matches'),		
         
         // Other
         dropZone: document.getElementById('file-drop-zone')
@@ -359,6 +376,100 @@ $(function() {
 			}, 0);
 		}
 	}
+
+    // ============================================
+    // DRAGGABLE PLAYHEAD ON MAIN TIMELINE
+    // ============================================
+    function setupPlayheadDragging() {
+        const playheadEl = dom.$mainPlayhead[0];
+        const timelineEl = dom.$mainTimeline[0];
+
+        // Helper: compute time from a clientX position on the timeline
+        function timeFromClientX(clientX) {
+            const rect = timelineEl.getBoundingClientRect();
+            const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+            return ratio * (dom.video.duration || 0);
+        }
+
+        // Helper: update playhead position directly from a percentage (no video round-trip)
+        function setPlayheadPercent(percent) {
+            dom.$mainPlayhead.css('left', percent + '%');
+        }
+
+        // --- Mouse support ---
+        playheadEl.addEventListener('mousedown', function(e) {
+            if (!dom.video.duration) return;
+            e.preventDefault();
+            e.stopPropagation();
+            state.isPlayheadDragging = true;
+            playheadEl.classList.add('dragging');
+            document.body.style.cursor = 'ew-resize';
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (!state.isPlayheadDragging) return;
+            e.preventDefault();
+            const time = timeFromClientX(e.clientX);
+            const percent = (time / dom.video.duration) * 100;
+            // Update playhead CSS instantly for smooth visual feedback
+            setPlayheadPercent(percent);
+            // Throttled video seek — update currentTime directly
+            dom.video.currentTime = time;
+            // Update time displays (uses currentTime, but we just set it)
+            updateTimeDisplaysFromTime(time);
+        });
+
+        document.addEventListener('mouseup', function() {
+            if (!state.isPlayheadDragging) return;
+            state.isPlayheadDragging = false;
+            playheadEl.classList.remove('dragging');
+            document.body.style.cursor = '';
+            state.lastDragEndTime = Date.now();
+        });
+
+        // --- Touch support ---
+        playheadEl.addEventListener('touchstart', function(e) {
+            if (!dom.video.duration) return;
+            e.preventDefault();
+            e.stopPropagation();
+            state.isPlayheadDragging = true;
+            playheadEl.classList.add('dragging');
+        }, { passive: false });
+
+        document.addEventListener('touchmove', function(e) {
+            if (!state.isPlayheadDragging) return;
+            e.preventDefault();
+            const touch = e.touches[0];
+            const time = timeFromClientX(touch.clientX);
+            const percent = (time / dom.video.duration) * 100;
+            setPlayheadPercent(percent);
+            dom.video.currentTime = time;
+            updateTimeDisplaysFromTime(time);
+        }, { passive: false });
+
+        document.addEventListener('touchend', function() {
+            if (!state.isPlayheadDragging) return;
+            state.isPlayheadDragging = false;
+            playheadEl.classList.remove('dragging');
+            state.lastDragEndTime = Date.now();
+        });
+    }
+
+    // Fast time display update that takes a time value directly
+    // instead of reading from video.currentTime (avoids stale reads)
+    function updateTimeDisplaysFromTime(time) {
+        if (!dom.video.duration) return;
+        const duration = dom.video.duration;
+
+        $('#current-time-value').text(toSMPTE(time));
+        $('#duration-time-value').text(toSMPTE(duration));
+        $('#selection-time').text(
+            `IN: ${toSMPTE(state.currentSelection.start)} - OUT: ${toSMPTE(state.currentSelection.end)}`
+        );
+        $('#selection-duration').text(
+            `Duration: ${toSMPTE(state.currentSelection.end - state.currentSelection.start)}`
+        );
+    }
     
     // ============================================
     // MARKER MANAGEMENT
@@ -683,6 +794,9 @@ $(function() {
             
             dom.markersList.appendChild(div);
         });
+        
+        // Update the search actions bar (match counter, keep/delete buttons)
+        updateMarkerSearchActions();
     }
     
     // ============================================
@@ -961,6 +1075,60 @@ $(function() {
         
         // Record timestamp to prevent document click from deselecting
         state.lastDragEndTime = Date.now();
+    }
+
+    // ============================================
+    // PLAY REGIONS - Sequential marker playback
+    // ============================================
+    function startPlayRegions() {
+        if (!state.markers.length || !dom.video.duration) return;
+
+        state.isPlayingRegions = true;
+        state.playingRegionIndex = 0;
+        $('#play-regions').addClass('active').html('⏹ Regions');
+
+        // Jump to the first marker and play
+        const firstMarker = state.markers[0];
+        dom.video.currentTime = firstMarker.start;
+        dom.video.play();
+        $('#play-pause').text('Pause');
+
+        // Highlight the active region
+        loadMarker(0);
+    }
+
+    function stopPlayRegions() {
+        state.isPlayingRegions = false;
+        state.playingRegionIndex = -1;
+        $('#play-regions').removeClass('active').html('▶ Regions');
+    }
+
+    function handlePlayRegionsTimeUpdate() {
+        if (!state.isPlayingRegions || state.playingRegionIndex === -1) return;
+
+        const currentMarker = state.markers[state.playingRegionIndex];
+        if (!currentMarker) {
+            stopPlayRegions();
+            return;
+        }
+
+        // Check if we've reached the end of the current region
+        if (dom.video.currentTime >= currentMarker.end - 0.05) {
+            const nextIndex = state.playingRegionIndex + 1;
+
+            if (nextIndex < state.markers.length) {
+                // Jump to next marker
+                state.playingRegionIndex = nextIndex;
+                const nextMarker = state.markers[nextIndex];
+                dom.video.currentTime = nextMarker.start;
+                loadMarker(nextIndex);
+            } else {
+                // All regions played — stop
+                dom.video.pause();
+                $('#play-pause').text('Play');
+                stopPlayRegions();
+            }
+        }
     }
 
     // ============================================
@@ -1705,6 +1873,10 @@ $(function() {
     function updateTimeDisplays() {
         if (!dom.video.duration) return;
         
+        // Skip updates while playhead is being dragged
+        // (the drag handler updates displays directly for instant feedback)
+        if (state.isPlayheadDragging) return;
+        
         $('#current-time-value').text(toSMPTE(dom.video.currentTime));
         $('#duration-time-value').text(toSMPTE(dom.video.duration));
         $('#selection-time').text(
@@ -1822,6 +1994,107 @@ $(function() {
         dom.markerSearchInput.value = '';
         updateMarkerSearchClearButton();
         updateMarkersList();
+    }
+    
+    // ============================================
+    // MARKER SEARCH ACTIONS (Keep/Delete Matches)
+    // ============================================
+    function getMarkerSearchFilterResults() {
+        const searchTerm = dom.markerSearchInput.value.toLowerCase().trim();
+        if (!searchTerm || !state.markers.length) {
+            return { searchTerm: '', matchIndices: [], nonMatchIndices: [], total: state.markers.length };
+        }
+        
+        const matchIndices = [];
+        const nonMatchIndices = [];
+        
+        state.markers.forEach((marker, index) => {
+            const commentObj = marker.comments && marker.comments.length > 0 ? marker.comments[0] : null;
+            const displayText = commentObj ? commentObj.text : "";
+            if (displayText.toLowerCase().includes(searchTerm)) {
+                matchIndices.push(index);
+            } else {
+                nonMatchIndices.push(index);
+            }
+        });
+        
+        return { searchTerm, matchIndices, nonMatchIndices, total: state.markers.length };
+    }
+    
+    function updateMarkerSearchActions() {
+        const { searchTerm, matchIndices, total } = getMarkerSearchFilterResults();
+        
+        if (!searchTerm || total === 0) {
+            dom.markerSearchActions.style.display = 'none';
+            return;
+        }
+        
+        dom.markerSearchActions.style.display = 'flex';
+        dom.markerMatchCounter.textContent = `${matchIndices.length} of ${total} markers found`;
+        
+        // Disable buttons when they'd have no effect
+        dom.keepOnlyMatchesBtn.disabled = matchIndices.length === 0 || matchIndices.length === total;
+        dom.deleteMatchesBtn.disabled = matchIndices.length === 0;
+    }
+    
+    function showBulkDeleteConfirmation(mode) {
+        const { matchIndices, nonMatchIndices, total } = getMarkerSearchFilterResults();
+        
+        let deleteCount, keepCount, title, description;
+        
+        if (mode === 'keep') {
+            deleteCount = nonMatchIndices.length;
+            keepCount = matchIndices.length;
+            title = 'Keep Only Matching Markers?';
+            description = `<strong>Keeping ${keepCount}</strong> matching marker${keepCount !== 1 ? 's' : ''}.<br>
+                           <strong>Deleting ${deleteCount}</strong> non-matching marker${deleteCount !== 1 ? 's' : ''} of ${total} total.`;
+        } else {
+            deleteCount = matchIndices.length;
+            keepCount = nonMatchIndices.length;
+            title = 'Delete Matching Markers?';
+            description = `<strong>Deleting ${deleteCount}</strong> matching marker${deleteCount !== 1 ? 's' : ''}.<br>
+                           <strong>Keeping ${keepCount}</strong> non-matching marker${keepCount !== 1 ? 's' : ''} of ${total} total.`;
+        }
+        
+        state.pendingBulkDeleteMode = mode;
+        dom.bulkDeleteTitle.textContent = title;
+        dom.bulkDeleteInfo.innerHTML = description;
+        dom.bulkDeleteMarkerModal.show();
+    }
+    
+    function executeBulkDelete() {
+        const mode = state.pendingBulkDeleteMode;
+        if (!mode) return;
+        
+        const { matchIndices, nonMatchIndices } = getMarkerSearchFilterResults();
+        
+        let indicesToKeep;
+        if (mode === 'keep') {
+            indicesToKeep = new Set(matchIndices);
+        } else {
+            indicesToKeep = new Set(nonMatchIndices);
+        }
+        
+        // Build new markers array
+        const newMarkers = state.markers.filter((_, index) => indicesToKeep.has(index));
+        const deletedCount = state.markers.length - newMarkers.length;
+        
+        // Clear active marker (it may have been deleted or its index shifted)
+        state.activeMarkerIndex = -1;
+        
+        // Replace markers
+        state.markers = newMarkers;
+        
+        // Clean up
+        state.pendingBulkDeleteMode = null;
+        dom.bulkDeleteMarkerModal.hide();
+        
+        // Clear search and refresh UI
+        dom.markerSearchInput.value = '';
+        updateMarkerSearchClearButton();
+        updateEditMarkerButtonState();
+        sortMarkers();            // re-sorts, calls updateMarkersList + renderTimelineMarkers
+        renderTimelineMarkers();
     }
     
     // ============================================
@@ -2214,6 +2487,8 @@ $(function() {
             } else {
                 dom.video.pause();
                 $(this).text('Play');
+                // Stop regions mode if user manually pauses
+                if (state.isPlayingRegions) stopPlayRegions();
             }
         });
         
@@ -2221,6 +2496,7 @@ $(function() {
             dom.video.pause();
             dom.video.currentTime = 0;
             $('#play-pause').text('Play');
+            if (state.isPlayingRegions) stopPlayRegions();
             updateTimeDisplays();
         });
         
@@ -2281,13 +2557,27 @@ $(function() {
             $(this).toggleClass('active', state.isRepeating);
         });
         
+        // Play Regions toggle
+        $('#play-regions').on('click', function() {
+            if (state.isPlayingRegions) {
+                dom.video.pause();
+                $('#play-pause').text('Play');
+                stopPlayRegions();
+            } else {
+                startPlayRegions();
+            }
+        });
+        
         // Main timeline click - deselect markers when clicking empty space
         dom.$mainTimeline.on('click', function(e) {
             if (!dom.video.duration) return;
             
-            // Check if clicked on a marker region
-            if (e.target.closest('.timeline-marker-region')) {
-                return; // Marker region handles its own click
+            // Don't handle if playhead was just dragged
+            if (Date.now() - state.lastDragEndTime < 200) return;
+            
+            // Check if clicked on a marker region or the playhead
+            if (e.target.closest('.timeline-marker-region') || e.target.closest('.main-timeline-playhead')) {
+                return;
             }
             
             // Clicked on empty space - deselect active marker
@@ -2306,13 +2596,16 @@ $(function() {
             if (!dom.video.duration) return;
             
             // Don't handle if we were dragging
-            if (state.isMarkerDragging || state.isMarkerResizingLeft || state.isMarkerResizingRight) {
+            if (state.isMarkerDragging || state.isMarkerResizingLeft || state.isMarkerResizingRight || state.isPlayheadDragging) {
                 return;
             }
             
-            // Check if tapped on a marker region
-            if (e.target.closest('.timeline-marker-region')) {
-                return; // Marker region handles its own touch
+            // Don't handle if playhead was just dragged
+            if (Date.now() - state.lastDragEndTime < 200) return;
+            
+            // Check if tapped on a marker region or the playhead
+            if (e.target.closest('.timeline-marker-region') || e.target.closest('.main-timeline-playhead')) {
+                return;
             }
             
             // Tapped on empty space - deselect active marker
@@ -2333,7 +2626,10 @@ $(function() {
             updateTimeDisplays();
             updateCurrentSubtitle();
             
-            if (state.isRepeating && dom.video.currentTime >= state.currentSelection.end) {
+            // Play Regions mode — jump between markers
+            handlePlayRegionsTimeUpdate();
+            
+            if (state.isRepeating && !state.isPlayingRegions && dom.video.currentTime >= state.currentSelection.end) {
                 dom.video.currentTime = state.currentSelection.start;
                 dom.video.play();
             }
@@ -2463,6 +2759,11 @@ $(function() {
         
         dom.markerSearchClearBtn.addEventListener('click', clearMarkerSearch);
         
+        // Marker search bulk actions
+        dom.keepOnlyMatchesBtn.addEventListener('click', () => showBulkDeleteConfirmation('keep'));
+        dom.deleteMatchesBtn.addEventListener('click', () => showBulkDeleteConfirmation('delete'));
+        dom.confirmBulkDeleteBtn.addEventListener('click', executeBulkDelete);
+        
         // Search padding
         dom.applySearchPaddingCheckbox.addEventListener('change', () => {
             dom.paddingInfoText.style.display = dom.applySearchPaddingCheckbox.checked ? 'inline' : 'none';
@@ -2491,6 +2792,12 @@ $(function() {
             updateTimeDisplays();
         });
         
+        // Subtitle overlay toggle
+        $('#toggle-subtitles').on('click', function() {
+            $(this).toggleClass('active');
+            $(dom.currentSubtitleDisplay).toggleClass('hidden');
+        });
+        
         // Document-level mouse events for marker dragging
         $(document).on('mousemove', handleMarkerDragMove);
         $(document).on('mouseup', handleMarkerDragEnd);
@@ -2509,7 +2816,7 @@ $(function() {
         // FIX: Added timestamp guard to prevent deselection right after drag/slider ends
         $(document).on('click', function(e) {
             // Don't deselect if clicking on marker-related elements
-            if ($(e.target).closest('.timeline-marker-region, .marker-item, #time-slider, .ui-slider-handle, .ui-slider-range').length > 0) {
+            if ($(e.target).closest('.timeline-marker-region, .marker-item, #time-slider, .ui-slider-handle, .ui-slider-range, .main-timeline-playhead').length > 0) {
                 return;
             }
             
@@ -2519,7 +2826,7 @@ $(function() {
             }
             
             // Don't deselect during drag operations
-            if (state.isMarkerDragging || state.isMarkerResizingLeft || state.isMarkerResizingRight) {
+            if (state.isMarkerDragging || state.isMarkerResizingLeft || state.isMarkerResizingRight || state.isPlayheadDragging) {
                 return;
             }
             
@@ -2550,6 +2857,7 @@ $(function() {
         initializeSlider();
 		enableSliderTouch();
         setupRangeDragging();
+        setupPlayheadDragging();
         setupEventHandlers();
         setupDragAndDrop();
         setupKeyboardShortcuts();
